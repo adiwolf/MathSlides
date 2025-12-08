@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק הגדרות ומשפטים - אינפי 1מ'</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- MathJax for rendering LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Confetti for winning -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #f3f4f6;
+            user-select: none;
+        }
+
+        /* --- Scrollbar Styling --- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* --- Game Styles --- */
+        .drop-zone {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            height: auto;
+            min-height: 45px;
+            border-bottom: 2px dashed #3b82f6;
+            margin: 4px;
+            vertical-align: middle;
+            background-color: #eef2ff;
+            border-radius: 6px;
+            transition: all 0.2s;
+            text-align: center;
+            padding: 6px 12px;
+            cursor: pointer;
+            line-height: 1.4;
+            font-size: 0.95rem;
+        }
+
+        .drop-zone:empty::before {
+            content: "___";
+            color: #bfdbfe;
+        }
+
+        .drop-zone.hovered {
+            background-color: #dbeafe;
+            border-color: #1d4ed8;
+            transform: scale(1.05);
+        }
+
+        .drop-zone.correct {
+            border-bottom: 2px solid #22c55e;
+            background-color: #dcfce7;
+            color: #15803d;
+        }
+
+        .drop-zone.wrong {
+            border-bottom: 2px solid #ef4444;
+            background-color: #fee2e2;
+            animation: shake 0.5s;
+        }
+
+        .draggable-item {
+            cursor: grab;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .draggable-item:active {
+            cursor: grabbing;
+        }
+
+        .draggable-item.selected {
+            background-color: #bfdbfe;
+            border-color: #3b82f6;
+            transform: scale(1.05);
+        }
+
+        /* MathJax overrides */
+        mjx-container {
+            font-size: 105% !important;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Menu Card Hover */
+        .level-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="bg-white shadow-md p-3 md:p-4 flex justify-between items-center z-10 shrink-0">
+        <div class="flex items-center gap-4">
+            <button onclick="showMenu()" class="text-blue-600 hover:text-blue-800 transition font-semibold flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 text-sm md:text-base">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125h19.5M2.25 12h19.5M2.25 16.875h19.5" />
+                </svg>
+                תפריט ראשי
+            </button>
+            <div>
+                <h1 class="text-lg md:text-xl font-bold text-gray-800 hidden md:block">משחק הגדרות ומשפטים</h1>
+                <p class="text-xs md:text-sm text-gray-500 hidden md:block">אינפי 1מ' - שבועות 1-5</p>
+            </div>
+        </div>
+        <div id="game-status" class="flex items-center gap-4 hidden">
+            <div class="text-base md:text-lg font-semibold text-blue-600">
+                שלב <span id="level-indicator">1</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center p-2 md:p-4 relative w-full max-w-6xl mx-auto overflow-hidden">
+        
+        <!-- MENU SCREEN -->
+        <div id="menu-screen" class="w-full h-full overflow-y-auto pr-2 fade-in">
+            <div class="text-center mb-6 mt-4">
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">בחרו שלב לתרגול</h2>
+                <p class="text-gray-600">סך הכל 30 שלבים בנושאי סדרות, גבולות וטופולוגיה של הממשיים.</p>
+            </div>
+            
+            <div id="levels-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-8">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+
+        <!-- GAME BOARD SCREEN -->
+        <div id="game-board" class="hidden bg-white rounded-xl shadow-lg p-4 md:p-8 w-full h-full flex flex-col fade-in relative overflow-y-auto max-h-full">
+            
+            <!-- Instructions -->
+            <div class="mb-4 text-center text-gray-600 font-medium text-sm md:text-base shrink-0">
+                הרכיבו את המשפט המדויק. שימו לב לסדר הכמתים (לכל/קיים) ולמשתנים.
+            </div>
+
+            <!-- The Theorem/Definition Text Area -->
+            <div class="flex-grow flex items-center justify-center py-4">
+                <div class="text-lg md:text-xl leading-relaxed text-gray-800 text-center flex flex-wrap justify-center gap-y-3 gap-x-1" id="sentence-container">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+
+            <!-- Feedback Message -->
+            <div id="feedback" class="h-8 text-center font-bold text-lg mb-2 shrink-0"></div>
+
+            <!-- Word Bank -->
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 shrink-0">
+                <h3 class="text-xs font-semibold text-gray-500 mb-2">מחסן מילים:</h3>
+                <div id="word-bank" class="flex flex-wrap gap-2 justify-center min-h-[60px]">
+                    <!-- Draggables injected via JS -->
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="mt-4 flex justify-center gap-4 shrink-0 pb-2">
+                <button onclick="resetLevel()" class="px-5 py-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 transition text-sm">
+                    נקה הכל
+                </button>
+                <button onclick="checkAnswer()" class="px-8 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-md transition transform hover:scale-105">
+                    בדיקה
+                </button>
+                <button id="next-btn" onclick="nextLevel()" class="hidden px-8 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-700 shadow-md transition animate-bounce">
+                    לשלב הבא &larr;
+                </button>
+            </div>
+        </div>
+
+        <!-- Completion Modal (End of all levels) -->
+        <div id="end-screen" class="hidden absolute inset-0 bg-white z-50 flex flex-col items-center justify-center text-center p-8">
+            <h2 class="text-4xl font-bold text-blue-600 mb-4">סיימת את כל 30 השלבים!</h2>
+            <p class="text-xl text-gray-600 mb-8">שליטה מצוינת בחומר של תחילת הסמסטר.</p>
+            <button onclick="showMenu()" class="px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-bold hover:bg-blue-700 shadow-lg">
+                חזרה לתפריט
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 p-2 text-center text-gray-500 text-xs shrink-0">
+        נוצר בהשראת MathSlides | תואם סילבוס אינפי 1מ'
+    </footer>
+
+    <script>
+        // --- Game Data (30 Levels) ---
+        const levels = [
+            // --- שבוע 1: מספרים ממשיים ---
+            {
+                id: 1,
+                title: "הגדרת הסופרמום (Supremum)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
+                answers: ["תהי $A$ חסומה מלעיל.", "$M$ הוא סופרמום", "אם הוא חסם מלעיל", "וגם", "לכל", "$\\varepsilon > 0$", "קיים", "$a \\in A$", "כך ש-", "$a > M - \\varepsilon$."],
+                distractors: ["חסם מלרע", "קיים", "$a < M$", "לכל", "$a > M + \\varepsilon$"]
+            },
+            {
+                id: 2,
+                title: "הגדרת האינפימום (Infimum)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
+                answers: ["תהי $A$ חסומה מלרע.", "$m$ הוא אינפימום", "אם הוא חסם מלרע", "וגם", "לכל", "$\\varepsilon > 0$", "קיים", "$a \\in A$", "כך ש-", "$a < m + \\varepsilon$."],
+                distractors: ["חסם מלעיל", "קיים", "$a > m$", "לכל", "$a < m - \\varepsilon$"]
+            },
+            {
+                id: 3,
+                title: "הגדרת מקסימום לקבוצה",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
+                answers: ["$M$ הוא מקסימום", "של קבוצה $A$", "אם", "$M \\in A$", "וגם", "$M$ הוא חסם מלעיל של $A$."],
+                distractors: ["$M \\notin A$", "חסם מלרע", "אינפימום", "סופרמום"]
+            },
+            {
+                id: 4,
+                title: "שלילת חסימות מלעיל (הגדרה)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}}`,
+                answers: ["קבוצה $A$", "אינה חסומה מלעיל", "אם", "לכל", "$M \\in \\mathbb{R}$", "קיים", "$a \\in A$ כך ש- $a > M$."],
+                distractors: ["קיים", "חסומה מלרע", "לכל", "$a < M$", "חסם מלעיל"]
+            },
+            {
+                id: 5,
+                title: "תכונת ארכימדס",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["לכל", "$x \\in \\mathbb{R}$", "קיים", "$n \\in \\mathbb{N}$", "כך ש- $n > x$."],
+                distractors: ["קיים", "לכל", "רציונלי", "כך ש- $n < x$"]
+            },
+            {
+                id: 6,
+                title: "אי-שוויון המשולש",
+                template: `{{0}} {{1}} {{2}}`,
+                answers: ["לכל", "$a,b \\in \\mathbb{R}$", "מתקיים $|a+b| \\le |a| + |b|$."],
+                distractors: ["$|a+b| \\ge |a| + |b|$", "קיים", "$|a+b| = |a| + |b|$"]
+            },
+
+            // --- שבוע 2: גבולות של סדרות ---
+            {
+                id: 7,
+                title: "הגדרת גבול סופי של סדרה",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
+                answers: ["$L$ הוא הגבול", "אם", "לכל", "$\\varepsilon > 0$", "קיים", "$N$", "כך שלכל", "$n > N$", "מתקיים", "$|a_n - L| < \\varepsilon$."],
+                distractors: ["קיים", "$\\varepsilon$", "לכל", "$|a_n - L| > \\varepsilon$"]
+            },
+            {
+                id: 8,
+                title: "שלילת הגדרת הגבול (L אינו הגבול)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
+                answers: ["$L$ אינו הגבול", "אם", "קיים", "$\\varepsilon > 0$", "כך שלכל", "$N$", "קיים", "$n > N$", "שעבורו", "$|a_n - L| \\ge \\varepsilon$."],
+                distractors: ["לכל", "קיים", "$n < N$", "$|a_n - L| < \\varepsilon$", "סופרמום"]
+            },
+            {
+                id: 9,
+                title: "הגדרת גבול באינסוף (שאיפה לפלוס אינסוף)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}}`,
+                answers: ["$a_n \\to \\infty$", "אם", "לכל", "$M > 0$", "קיים", "$N$", "כך שלכל", "$n > N$", "מתקיים $a_n > M$."],
+                distractors: ["קיים", "$M$", "לכל", "$a_n < M$", "$|a_n| > M$"]
+            },
+            {
+                id: 10,
+                title: "יחידות הגבול",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["אם סדרה $a_n$", "מתכנסת,", "אזי גבולה", "הוא יחיד."],
+                distractors: ["יש לה שני גבולות", "היא אינה חסומה", "מתבדרת"]
+            },
+            {
+                id: 11,
+                title: "משפט: התכנסות גוררת חסימות",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["כל סדרה", "מתכנסת", "היא", "חסומה."],
+                distractors: ["מתבדרת", "מונוטונית", "אינה חסומה", "קבועה"]
+            },
+            {
+                id: 12,
+                title: "משפט הסנדוויץ'",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["אם $a_n \\le b_n \\le c_n$", "וגם", "$\\lim a_n = \\lim c_n = L$", "אזי", "$\\lim b_n = L$."],
+                distractors: ["$\\lim b_n = 0$", "או", "לכל $n > N$"]
+            },
+            {
+                id: 13,
+                title: "אריתמטיקה של גבולות (מכפלה)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["אם", "$a_n \\to A$", "ו- $b_n \\to B$", "אזי", "$a_n \\cdot b_n \\to A \\cdot B$."],
+                distractors: ["$a_n \\cdot b_n \\to A + B$", "או", "$\\frac{a_n}{b_n} \\to A \\cdot B$"]
+            },
+
+            // --- שבוע 3: משפטי גבולות מתקדמים ומבחנים ---
+            {
+                id: 14,
+                title: "מבחן המנה (ד'אלמבר) להתכנסות",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["תהי $a_n > 0$.", "אם", "$\\lim \\frac{a_{n+1}}{a_n} = q < 1$", "אזי", "$\\lim a_n = 0$."],
+                distractors: ["$q > 1$", "$\\lim a_n = \\infty$", "$q = 1$"]
+            },
+            {
+                id: 15,
+                title: "מבחן השורש (קושי) להתבדרות",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["תהי $a_n > 0$.", "אם", "$\\lim \\sqrt[n]{a_n} = q > 1$", "אזי", "$\\lim a_n = \\infty$."],
+                distractors: ["$q < 1$", "$\\lim a_n = 0$", "מתכנסת"]
+            },
+            {
+                id: 16,
+                title: "גבול ידוע: שורש n-י של n",
+                template: `{{0}}`,
+                answers: ["$\\lim_{n \\to \\infty} \\sqrt[n]{n} = 1$."],
+                distractors: ["$\\lim_{n \\to \\infty} \\sqrt[n]{n} = \\infty$", "$\\lim_{n \\to \\infty} \\sqrt[n]{n} = 0$"]
+            },
+            {
+                id: 17,
+                title: "גבול ידוע: שורש n-י של קבוע",
+                template: `{{0}} {{1}}`,
+                answers: ["לכל $a > 0$,", "$\\lim_{n \\to \\infty} \\sqrt[n]{a} = 1$."],
+                distractors: ["$\\lim \\sqrt[n]{a} = a$", "$\\lim \\sqrt[n]{a} = 0$"]
+            },
+
+            // --- שבוע 4: מונוטוניות, תת-סדרות ---
+            {
+                id: 18,
+                title: "הגדרת סדרה מונוטונית עולה",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["סדרה $a_n$", "היא מונוטונית עולה", "אם", "לכל $n$", "$a_{n+1} \\ge a_n$."],
+                distractors: ["$a_{n+1} \\le a_n$", "יורדת", "מתכנסת"]
+            },
+            {
+                id: 19,
+                title: "משפט ההתכנסות המונוטונית",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["סדרה מונוטונית", "וחסומה", "היא", "מתכנסת."],
+                distractors: ["מתבדרת", "סדרת קושי", "חיובית"]
+            },
+            {
+                id: 20,
+                title: "הלמה של קנטור (קטעים משולבים)",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["לכל סדרת קטעים סגורים", "מוכלים $I_{n+1} \\subseteq I_n$", "שאורכם שואף לאפס,", "יש נקודה משותפת יחידה."],
+                distractors: ["קטעים פתוחים", "החיתוך ריק", "אינסוף נקודות"]
+            },
+            {
+                id: 21,
+                title: "משפט תת-סדרה של סדרה מתכנסת",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["אם", "$a_n \\to L$", "אזי", "כל תת-סדרה שלה", "מתכנסת ל-$L$."],
+                distractors: ["מתבדרת", "מתכנסת ל-$L'$", "קיים"]
+            },
+            {
+                id: 22,
+                title: "למה לקראת בולצאנו-ויירשטראס",
+                template: `{{0}} {{1}} {{2}}`,
+                answers: ["לכל סדרה", "קיימת", "תת-סדרה מונוטונית."],
+                distractors: ["חסומה", "מתכנסת", "יחידה"]
+            },
+            {
+                id: 23,
+                title: "משפט בולצאנו-ויירשטראס",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["לכל סדרה", "חסומה", "קיימת", "תת-סדרה מתכנסת."],
+                distractors: ["מונוטונית", "מתבדרת", "לא חסומה"]
+            },
+            {
+                id: 24,
+                title: "הגדרת גבול חלקי",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
+                answers: ["$L$ הוא גבול חלקי", "של $a_n$", "אם", "קיימת תת-סדרה $a_{n_k}$", "כך ש- $a_{n_k} \\to L$."],
+                distractors: ["לכל תת-סדרה", "סופרמום", "יחיד"]
+            },
+
+            // --- שבוע 5: גבול עליון/תחתון וקושי ---
+            {
+                id: 25,
+                title: "הגדרת גבול עליון (Limsup)",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["הגבול העליון", "הוא", "הסופרמום", "של קבוצת הגבולות החלקיים."],
+                distractors: ["האינפימום", "המקסימום", "הממוצע"]
+            },
+            {
+                id: 26,
+                title: "משפט שוויון גבולות עליון ותחתון",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["סדרה מתכנסת (במובן הרחב)", "אם ורק אם", "הגבול העליון", "שווה לגבול התחתון."],
+                distractors: ["שונה", "גדול", "חסומה"]
+            },
+            {
+                id: 27,
+                title: "הגדרת סדרת קושי",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}}`,
+                answers: ["סדרה $a_n$ היא קושי", "אם", "לכל", "$\\varepsilon > 0$", "קיים", "$N$", "כך שלכל", "$n,m > N$", "מתקיים $|a_n - a_m| < \\varepsilon$."],
+                distractors: ["קיים", "$|a_n - L| < \\varepsilon$", "לכל $N$"]
+            },
+            {
+                id: 28,
+                title: "שלילת סדרת קושי (אינה קושי)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}}`,
+                answers: ["סדרה אינה קושי", "אם", "קיים", "$\\varepsilon > 0$", "כך שלכל", "$N$", "קיימים", "$n,m > N$", "שעבורם $|a_n - a_m| \\ge \\varepsilon$."],
+                distractors: ["לכל", "קיים $N$", "קטן מ-"]
+            },
+            {
+                id: 29,
+                title: "תנאי קושי להתכנסות",
+                template: `{{0}} {{1}} {{2}}`,
+                answers: ["סדרה ממשית מתכנסת", "אם ורק אם", "היא סדרת קושי."],
+                distractors: ["חסומה", "מונוטונית", "חיובית"]
+            },
+            {
+                id: 30,
+                title: "משפט היינה-בורל (כיסויים)",
+                template: `{{0}} {{1}} {{2}} {{3}}`,
+                answers: ["תהי $K$ קבוצה סגורה וחסומה.", "אזי לכל כיסוי פתוח של $K$", "קיים", "תת-כיסוי סופי."],
+                distractors: ["פתוחה", "לכל תת-כיסוי", "אינסופי"]
+            }
+        ];
+
+        // --- State Management ---
+        let currentLevelIndex = 0;
+        let placedItems = {}; 
+        let selectedItem = null;
+
+        // --- DOM Elements ---
+        const menuScreen = document.getElementById('menu-screen');
+        const gameBoard = document.getElementById('game-board');
+        const endScreen = document.getElementById('end-screen');
+        const levelsGrid = document.getElementById('levels-grid');
+        const sentenceContainer = document.getElementById('sentence-container');
+        const wordBank = document.getElementById('word-bank');
+        const feedbackEl = document.getElementById('feedback');
+        const levelIndicator = document.getElementById('level-indicator');
+        const nextBtn = document.getElementById('next-btn');
+        const gameStatus = document.getElementById('game-status');
+
+        // --- Initialization ---
+        function initGame() {
+            renderMenu();
+            showMenu();
+        }
+
+        function renderMenu() {
+            levelsGrid.innerHTML = levels.map((level, index) => {
+                return `
+                <div onclick="startLevel(${index})" class="level-card bg-white p-6 rounded-xl border border-blue-100 shadow-sm cursor-pointer transition flex flex-col items-center text-center h-full hover:border-blue-300">
+                    <div class="text-3xl font-bold text-blue-100 mb-2">${index + 1}</div>
+                    <div class="text-lg font-semibold text-gray-800">${level.title}</div>
+                </div>
+                `;
+            }).join('');
+            
+            // Render Math in titles if any
+            if (window.MathJax) {
+                MathJax.typesetPromise([levelsGrid]);
+            }
+        }
+
+        function showMenu() {
+            menuScreen.classList.remove('hidden');
+            gameBoard.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            gameStatus.classList.add('hidden');
+            // Reset game state to be safe
+            selectedItem = null;
+            placedItems = {};
+        }
+
+        function startLevel(index) {
+            currentLevelIndex = index;
+            menuScreen.classList.add('hidden');
+            gameBoard.classList.remove('hidden');
+            endScreen.classList.add('hidden');
+            gameStatus.classList.remove('hidden');
+            loadLevel(currentLevelIndex);
+        }
+
+        // --- Level Loading ---
+        function loadLevel(index) {
+            const level = levels[index];
+            levelIndicator.innerText = index + 1;
+            placedItems = {};
+            selectedItem = null;
+            feedbackEl.innerText = "";
+            feedbackEl.className = "h-8 text-center font-bold text-lg mb-2";
+            nextBtn.classList.add('hidden');
+
+            let htmlContent = level.template;
+            level.answers.forEach((ans, i) => {
+                const slotHtml = `<div class="drop-zone" data-index="${i}" ondragover="allowDrop(event)" ondrop="drop(event)" onclick="handleSlotClick(${i})"></div>`;
+                htmlContent = htmlContent.replace(`{{${i}}}`, slotHtml);
+            });
+            
+            htmlContent = `<div class="w-full text-blue-600 font-bold text-lg mb-4 text-center border-b border-blue-100 pb-2">${level.title}</div>` + htmlContent;
+            sentenceContainer.innerHTML = htmlContent;
+
+            // Prepare words
+            const bankItems = [];
+            level.answers.forEach(a => bankItems.push({text: a, type: 'correct'}));
+            level.distractors.forEach(d => bankItems.push({text: d, type: 'distractor'}));
+            
+            // Shuffle
+            shuffleArray(bankItems);
+
+            wordBank.innerHTML = "";
+            bankItems.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = "draggable-item bg-white border border-blue-300 rounded px-3 py-2 font-medium text-blue-800 hover:bg-blue-50 select-none cursor-pointer text-sm md:text-base";
+                div.draggable = true;
+                div.innerHTML = item.text;
+                div.setAttribute('data-value', item.text); 
+                
+                div.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData("text", item.text); 
+                    if(selectedItem) { selectedItem.classList.remove('selected'); selectedItem = null; }
+                });
+                
+                div.addEventListener('click', (e) => {
+                    if (elementIsSlot(div)) return; 
+                    document.querySelectorAll('.draggable-item').forEach(el => el.classList.remove('selected'));
+                    div.classList.add('selected');
+                    selectedItem = div;
+                });
+                
+                wordBank.appendChild(div);
+            });
+
+            if (window.MathJax) {
+                MathJax.typesetPromise([sentenceContainer, wordBank]);
+            }
+        }
+
+        function elementIsSlot(el) {
+            return el.closest('.drop-zone') !== null;
+        }
+
+        // --- Interactions (Drag & Drop + Click) ---
+
+        let draggedContent = null;
+        let draggedElement = null;
+
+        function drag(ev) {
+            const rawValue = ev.target.getAttribute('data-value');
+            ev.dataTransfer.setData("text/plain", rawValue);
+            if(selectedItem) { selectedItem.classList.remove('selected'); selectedItem = null; }
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.add('hovered');
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const slot = ev.target.closest('.drop-zone');
+            slot.classList.remove('hovered');
+            if (!slot) return;
+            const rawValue = ev.dataTransfer.getData("text/plain");
+            placeWordInSlot(slot, rawValue);
+        }
+
+        function handleSlotClick(slotIndex) {
+            const slot = document.querySelector(`.drop-zone[data-index="${slotIndex}"]`);
+            if (selectedItem) {
+                const rawValue = selectedItem.getAttribute('data-value');
+                placeWordInSlot(slot, rawValue);
+                selectedItem.classList.remove('selected');
+                selectedItem = null;
+            } else if (placedItems[slotIndex]) {
+                clearSlot(slot, slotIndex);
+            }
+        }
+
+        function placeWordInSlot(slot, rawContent) {
+            const index = slot.getAttribute('data-index');
+            slot.innerText = rawContent; 
+            slot.setAttribute('data-value', rawContent);
+            slot.style.borderStyle = "solid";
+            slot.style.backgroundColor = "#eff6ff";
+            placedItems[index] = rawContent;
+            if (window.MathJax) {
+                slot.innerHTML = rawContent;
+                MathJax.typesetPromise([slot]);
+            }
+        }
+
+        function clearSlot(slot, index) {
+            slot.innerHTML = "";
+            slot.removeAttribute('data-value');
+            slot.style.borderStyle = "dashed";
+            slot.style.backgroundColor = "#eef2ff";
+            delete placedItems[index];
+            slot.classList.remove('correct', 'wrong');
+        }
+
+        // --- Game Logic ---
+
+        function checkAnswer() {
+            const level = levels[currentLevelIndex];
+            let allCorrect = true;
+            let filledCount = 0;
+
+            level.answers.forEach((ans, i) => {
+                const slot = document.querySelector(`.drop-zone[data-index="${i}"]`);
+                const userValue = placedItems[i]; 
+
+                if (!userValue) {
+                    allCorrect = false;
+                    slot.classList.add('wrong');
+                    return;
+                }
+                filledCount++;
+                const isMatch = checkMatch(userValue, ans);
+
+                if (isMatch) {
+                    slot.classList.add('correct');
+                    slot.classList.remove('wrong');
+                } else {
+                    slot.classList.add('wrong');
+                    slot.classList.remove('correct');
+                    allCorrect = false;
+                }
+            });
+
+            if (filledCount < level.answers.length) {
+                feedbackEl.innerText = "נא למלא את כל החסר";
+                feedbackEl.className = "text-yellow-600 font-bold mb-4";
+                return;
+            }
+
+            if (allCorrect) {
+                feedbackEl.innerText = "כל הכבוד! תשובה נכונה.";
+                feedbackEl.className = "text-green-600 font-bold mb-4 text-xl";
+                nextBtn.classList.remove('hidden');
+                triggerConfetti();
+            } else {
+                feedbackEl.innerText = "יש טעות, נסו שוב.";
+                feedbackEl.className = "text-red-600 font-bold mb-4";
+                setTimeout(() => {
+                    document.querySelectorAll('.wrong').forEach(el => el.classList.remove('wrong')); 
+                }, 500);
+            }
+        }
+
+        function checkMatch(userValue, correctValue) {
+            return userValue.trim() === correctValue.trim();
+        }
+        
+        // --- Navigation ---
+
+        function nextLevel() {
+            if (currentLevelIndex < levels.length - 1) {
+                startLevel(currentLevelIndex + 1);
+            } else {
+                showEndScreen();
+            }
+        }
+
+        function resetLevel() {
+            loadLevel(currentLevelIndex);
+        }
+
+        function showEndScreen() {
+            gameBoard.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            endScreen.classList.add('fade-in');
+            triggerConfetti();
+        }
+
+        function restartGame() {
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function triggerConfetti() {
+            var duration = 3 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // Start
+        window.onload = initGame;
+
+    </script>
+</body>
+</html>
