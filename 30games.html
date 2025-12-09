@@ -55,9 +55,9 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            min-width: 50px; /* Reduced min-width for smaller particles */
+            min-width: 50px;
             height: auto;
-            min-height: 40px;
+            min-height: 50px; /* Increased slightly for taller limits */
             border-bottom: 2px dashed #3b82f6;
             margin: 3px;
             vertical-align: middle;
@@ -68,7 +68,7 @@
             padding: 4px 8px;
             cursor: pointer;
             line-height: 1.4;
-            font-size: 0.9rem;
+            font-size: 0.95rem; /* Slightly larger text */
         }
 
         .drop-zone:empty::before {
@@ -112,7 +112,7 @@
 
         /* MathJax overrides */
         mjx-container {
-            font-size: 105% !important;
+            font-size: 110% !important;
         }
 
         @keyframes shake {
@@ -182,7 +182,7 @@
             
             <!-- Instructions -->
             <div class="mb-4 text-center text-gray-600 font-medium text-sm md:text-base shrink-0">
-                הרכיבו את המשפט המדויק. שימו לב להפרדת הכמתים (לכל/קיים/אם/אזי).
+                הרכיבו את המשפט המדויק. שימו לב להפרדת הכמתים (לכל/קיים/אם/אזי) ולסימון הגבולות.
             </div>
 
             <!-- The Theorem/Definition Text Area -->
@@ -234,7 +234,7 @@
     </footer>
 
     <script>
-        // --- Game Data (30 Levels - Granular Split) ---
+        // --- Game Data (30 Levels - Granular Split & Fixed Limits with \limits) ---
         const levels = [
             // --- שבוע 1: מספרים ממשיים ---
             {
@@ -299,7 +299,7 @@
                 id: 9,
                 title: "הגדרת גבול באינסוף (שאיפה לפלוס אינסוף)",
                 template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
-                answers: ["$a_n \\to \\infty$", "אם", "לכל", "$M > 0$", "קיים", "$N$", "כך ש-", "לכל", "$n > N$", "מתקיים $a_n > M$."],
+                answers: ["$\\lim\\limits_{n \\to \\infty} a_n = \\infty$", "אם", "לכל", "$M > 0$", "קיים", "$N$", "כך ש-", "לכל", "$n > N$", "מתקיים $a_n > M$."],
                 distractors: ["קיים", "$M$", "לכל", "$a_n < M$", "$|a_n| > M$"]
             },
             {
@@ -320,8 +320,8 @@
                 id: 12,
                 title: "משפט הסנדוויץ'",
                 template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["תהיינה", "$a_n \\le b_n \\le c_n$", "אם", "$\\lim a_n = \\lim c_n = L$", "אזי", "$\\lim b_n = L$."],
-                distractors: ["$\\lim b_n = 0$", "או", "לכל $n > N$"]
+                answers: ["תהיינה", "$a_n \\le b_n \\le c_n$", "אם", "$\\lim\\limits_{n \\to \\infty} a_n = \\lim\\limits_{n \\to \\infty} c_n = L$", "אזי", "$\\lim\\limits_{n \\to \\infty} b_n = L$."],
+                distractors: ["$\\lim\\limits_{n \\to \\infty} b_n = 0$", "או", "לכל $n > N$"]
             },
             {
                 id: 13,
@@ -336,29 +336,29 @@
                 id: 14,
                 title: "מבחן המנה (ד'אלמבר) להתכנסות",
                 template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["תהי $a_n > 0$.", "אם", "$\\lim \\frac{a_{n+1}}{a_n} = q < 1$", "אזי", "$\\lim a_n = 0$."],
-                distractors: ["$q > 1$", "$\\lim a_n = \\infty$", "$q = 1$"]
+                answers: ["תהי $a_n > 0$.", "אם", "$\\lim\\limits_{n \\to \\infty} \\frac{a_{n+1}}{a_n} = q < 1$", "אזי", "$\\lim\\limits_{n \\to \\infty} a_n = 0$."],
+                distractors: ["$q > 1$", "$\\lim\\limits_{n \\to \\infty} a_n = \\infty$", "$q = 1$"]
             },
             {
                 id: 15,
                 title: "מבחן השורש (קושי) להתבדרות",
                 template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["תהי $a_n > 0$.", "אם", "$\\lim \\sqrt[n]{a_n} = q > 1$", "אזי", "$\\lim a_n = \\infty$."],
-                distractors: ["$q < 1$", "$\\lim a_n = 0$", "מתכנסת"]
+                answers: ["תהי $a_n > 0$.", "אם", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a_n} = q > 1$", "אזי", "$\\lim\\limits_{n \\to \\infty} a_n = \\infty$."],
+                distractors: ["$q < 1$", "$\\lim\\limits_{n \\to \\infty} a_n = 0$", "מתכנסת"]
             },
             {
                 id: 16,
                 title: "גבול ידוע: שורש n-י של n",
                 template: `{{0}}`,
-                answers: ["$\\lim_{n \\to \\infty} \\sqrt[n]{n} = 1$."],
-                distractors: ["$\\lim_{n \\to \\infty} \\sqrt[n]{n} = \\infty$", "$\\lim_{n \\to \\infty} \\sqrt[n]{n} = 0$"]
+                answers: ["$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{n} = 1$."],
+                distractors: ["$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{n} = \\infty$", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{n} = 0$"]
             },
             {
                 id: 17,
                 title: "גבול ידוע: שורש n-י של קבוע",
                 template: `{{0}} {{1}} {{2}}`,
-                answers: ["לכל", "$a > 0$,", "$\\lim_{n \\to \\infty} \\sqrt[n]{a} = 1$."],
-                distractors: ["$\\lim \\sqrt[n]{a} = a$", "$\\lim \\sqrt[n]{a} = 0$", "קיים"]
+                answers: ["לכל", "$a > 0$,", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a} = 1$."],
+                distractors: ["$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a} = a$", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a} = 0$", "קיים"]
             },
 
             // --- שבוע 4: מונוטוניות, תת-סדרות ---
@@ -387,7 +387,7 @@
                 id: 21,
                 title: "משפט תת-סדרה של סדרה מתכנסת",
                 template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["אם", "$a_n \\to L$", "אזי", "כל", "תת-סדרה שלה", "מתכנסת ל-$L$."],
+                answers: ["אם", "$\\lim\\limits_{n \\to \\infty} a_n = L$", "אזי", "כל", "תת-סדרה שלה", "מתכנסת ל-$L$."],
                 distractors: ["מתבדרת", "מתכנסת ל-$L'$", "קיים"]
             },
             {
@@ -408,7 +408,7 @@
                 id: 24,
                 title: "הגדרת גבול חלקי",
                 template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["$L$ הוא גבול חלקי", "של $a_n$", "אם", "קיימת", "תת-סדרה $a_{n_k}$", "כך ש- $a_{n_k} \\to L$."],
+                answers: ["$L$ הוא גבול חלקי", "של $a_n$", "אם", "קיימת", "תת-סדרה $a_{n_k}$", "כך ש-", "$\\lim\\limits_{k \\to \\infty} a_{n_k} = L$."],
                 distractors: ["לכל", "תת-סדרה", "סופרמום", "יחיד"]
             },
 
