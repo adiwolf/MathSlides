@@ -1,738 +1,1016 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>משחק הגדרות ומשפטים - אינפי 1מ'</title>
-    
-    <!-- Tailwind CSS for styling -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- MathJax Configuration -->
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']]
-            },
-            svg: {
-                fontCache: 'global'
-            }
-        };
-    </script>
-    <!-- MathJax for rendering LaTeX -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    
-    <!-- Confetti for winning -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<html dir="rtl" lang="he"><head>
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap');
-        
+<script class="injected-ffc2e83d85">
+(function(){'use strict';function q(b){var c=0;return function(){return c<b.length?{done:!1,value:b[c++]}:{done:!0}}}function t(b){var c=typeof Symbol!="undefined"&&Symbol.iterator&&b[Symbol.iterator];if(c)return c.call(b);if(typeof b.length=="number")return{next:q(b)};throw Error(String(b)+" is not an iterable or ArrayLike");}var u=typeof Object.defineProperties=="function"?Object.defineProperty:function(b,c,g){if(b==Array.prototype||b==Object.prototype)return b;b[c]=g.value;return b};
+function v(b){b=["object"==typeof globalThis&&globalThis,b,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var c=0;c<b.length;++c){var g=b[c];if(g&&g.Math==Math)return g}throw Error("Cannot find global object");}var w=v(this);function x(b,c){if(c)a:{var g=w;b=b.split(".");for(var h=0;h<b.length-1;h++){var l=b[h];if(!(l in g))break a;g=g[l]}b=b[b.length-1];h=g[b];c=c(h);c!=h&&c!=null&&u(g,b,{configurable:!0,writable:!0,value:c})}}
+function y(){this.j=!1;this.g=null;this.u=void 0;this.h=1;this.v=this.l=0;this.i=null}function z(b){if(b.j)throw new TypeError("Generator is already running");b.j=!0}y.prototype.o=function(b){this.u=b};function A(b,c){b.i={I:c,J:!0};b.h=b.l||b.v}y.prototype.return=function(b){this.i={return:b};this.h=this.v};function B(b){this.g=new y;this.h=b}function E(b,c){z(b.g);var g=b.g.g;if(g)return F(b,"return"in g?g["return"]:function(h){return{value:h,done:!0}},c,b.g.return);b.g.return(c);return G(b)}
+function F(b,c,g,h){try{var l=c.call(b.g.g,g);if(!(l instanceof Object))throw new TypeError("Iterator result "+l+" is not an object");if(!l.done)return b.g.j=!1,l;var m=l.value}catch(f){return b.g.g=null,A(b.g,f),G(b)}b.g.g=null;h.call(b.g,m);return G(b)}function G(b){for(;b.g.h;)try{var c=b.h(b.g);if(c)return b.g.j=!1,{value:c.value,done:!1}}catch(g){b.g.u=void 0,A(b.g,g)}b.g.j=!1;if(b.g.i){c=b.g.i;b.g.i=null;if(c.J)throw c.I;return{value:c.return,done:!0}}return{value:void 0,done:!0}}
+function H(b){this.next=function(c){z(b.g);b.g.g?c=F(b,b.g.g.next,c,b.g.o):(b.g.o(c),c=G(b));return c};this.throw=function(c){z(b.g);b.g.g?c=F(b,b.g.g["throw"],c,b.g.o):(A(b.g,c),c=G(b));return c};this.return=function(c){return E(b,c)};this[Symbol.iterator]=function(){return this}}function I(b){function c(h){return b.next(h)}function g(h){return b.throw(h)}return new Promise(function(h,l){function m(f){f.done?h(f.value):Promise.resolve(f.value).then(c,g).then(m,l)}m(b.next())})}
+x("Symbol",function(b){function c(m){if(this instanceof c)throw new TypeError("Symbol is not a constructor");return new g(h+(m||"")+"_"+l++,m)}function g(m,f){this.g=m;u(this,"description",{configurable:!0,writable:!0,value:f})}if(b)return b;g.prototype.toString=function(){return this.g};var h="jscomp_symbol_"+(Math.random()*1E9>>>0)+"_",l=0;return c});
+x("Symbol.iterator",function(b){if(b)return b;b=Symbol("Symbol.iterator");u(Array.prototype,b,{configurable:!0,writable:!0,value:function(){return J(q(this))}});return b});function J(b){b={next:b};b[Symbol.iterator]=function(){return this};return b}
+x("Promise",function(b){function c(f){this.h=0;this.i=void 0;this.g=[];this.u=!1;var a=this.j();try{f(a.resolve,a.reject)}catch(d){a.reject(d)}}function g(){this.g=null}function h(f){return f instanceof c?f:new c(function(a){a(f)})}if(b)return b;g.prototype.h=function(f){if(this.g==null){this.g=[];var a=this;this.i(function(){a.l()})}this.g.push(f)};var l=w.setTimeout;g.prototype.i=function(f){l(f,0)};g.prototype.l=function(){for(;this.g&&this.g.length;){var f=this.g;this.g=[];for(var a=0;a<f.length;++a){var d=
+f[a];f[a]=null;try{d()}catch(e){this.j(e)}}}this.g=null};g.prototype.j=function(f){this.i(function(){throw f;})};c.prototype.j=function(){function f(e){return function(k){d||(d=!0,e.call(a,k))}}var a=this,d=!1;return{resolve:f(this.D),reject:f(this.l)}};c.prototype.D=function(f){if(f===this)this.l(new TypeError("A Promise cannot resolve to itself"));else if(f instanceof c)this.G(f);else{a:switch(typeof f){case "object":var a=f!=null;break a;case "function":a=!0;break a;default:a=!1}a?this.C(f):this.o(f)}};
+c.prototype.C=function(f){var a=void 0;try{a=f.then}catch(d){this.l(d);return}typeof a=="function"?this.H(a,f):this.o(f)};c.prototype.l=function(f){this.v(2,f)};c.prototype.o=function(f){this.v(1,f)};c.prototype.v=function(f,a){if(this.h!=0)throw Error("Cannot settle("+f+", "+a+"): Promise already settled in state"+this.h);this.h=f;this.i=a;this.h===2&&this.F();this.K()};c.prototype.F=function(){var f=this;l(function(){if(f.B()){var a=w.console;typeof a!=="undefined"&&a.error(f.i)}},1)};c.prototype.B=
+function(){if(this.u)return!1;var f=w.CustomEvent,a=w.Event,d=w.dispatchEvent;if(typeof d==="undefined")return!0;typeof f==="function"?f=new f("unhandledrejection",{cancelable:!0}):typeof a==="function"?f=new a("unhandledrejection",{cancelable:!0}):(f=w.document.createEvent("CustomEvent"),f.initCustomEvent("unhandledrejection",!1,!0,f));f.promise=this;f.reason=this.i;return d(f)};c.prototype.K=function(){if(this.g!=null){for(var f=0;f<this.g.length;++f)m.h(this.g[f]);this.g=null}};var m=new g;c.prototype.G=
+function(f){var a=this.j();f.A(a.resolve,a.reject)};c.prototype.H=function(f,a){var d=this.j();try{f.call(a,d.resolve,d.reject)}catch(e){d.reject(e)}};c.prototype.then=function(f,a){function d(n,r){return typeof n=="function"?function(C){try{e(n(C))}catch(D){k(D)}}:r}var e,k,p=new c(function(n,r){e=n;k=r});this.A(d(f,e),d(a,k));return p};c.prototype.catch=function(f){return this.then(void 0,f)};c.prototype.A=function(f,a){function d(){switch(e.h){case 1:f(e.i);break;case 2:a(e.i);break;default:throw Error("Unexpected state: "+
+e.h);}}var e=this;this.g==null?m.h(d):this.g.push(d);this.u=!0};c.resolve=h;c.reject=function(f){return new c(function(a,d){d(f)})};c.race=function(f){return new c(function(a,d){for(var e=t(f),k=e.next();!k.done;k=e.next())h(k.value).A(a,d)})};c.all=function(f){var a=t(f),d=a.next();return d.done?h([]):new c(function(e,k){function p(C){return function(D){n[C]=D;r--;r==0&&e(n)}}var n=[],r=0;do n.push(void 0),r++,h(d.value).A(p(n.length-1),k),d=a.next();while(!d.done)})};return c});
+function K(b,c){return Object.prototype.hasOwnProperty.call(b,c)}x("Object.is",function(b){return b?b:function(c,g){return c===g?c!==0||1/c===1/g:c!==c&&g!==g}});x("Array.prototype.includes",function(b){return b?b:function(c,g){var h=this;h instanceof String&&(h=String(h));var l=h.length;g=g||0;for(g<0&&(g=Math.max(g+l,0));g<l;g++){var m=h[g];if(m===c||Object.is(m,c))return!0}return!1}});
+x("String.prototype.includes",function(b){return b?b:function(c,g){if(this==null)throw new TypeError("The 'this' value for String.prototype.includes must not be null or undefined");if(c instanceof RegExp)throw new TypeError("First argument to String.prototype.includes must not be a regular expression");return this.indexOf(c,g||0)!==-1}});
+x("WeakMap",function(b){function c(d){this.g=(a+=Math.random()+1).toString();if(d){d=t(d);for(var e;!(e=d.next()).done;)e=e.value,this.set(e[0],e[1])}}function g(){}function h(d){var e=typeof d;return e==="object"&&d!==null||e==="function"}function l(d){if(!K(d,f)){var e=new g;u(d,f,{value:e})}}function m(d){var e=Object[d];e&&(Object[d]=function(k){if(k instanceof g)return k;Object.isExtensible(k)&&l(k);return e(k)})}if(function(){if(!b||!Object.seal)return!1;try{var d=Object.seal({}),e=Object.seal({}),
+k=new b([[d,2],[e,3]]);if(k.get(d)!=2||k.get(e)!=3)return!1;k.delete(d);k.set(e,4);return!k.has(d)&&k.get(e)==4}catch(p){return!1}}())return b;var f="$jscomp_hidden_"+Math.random();m("freeze");m("preventExtensions");m("seal");var a=0;c.prototype.set=function(d,e){if(!h(d))throw Error("Invalid WeakMap key");l(d);if(!K(d,f))throw Error("WeakMap key fail: "+d);d[f][this.g]=e;return this};c.prototype.get=function(d){return h(d)&&K(d,f)?d[f][this.g]:void 0};c.prototype.has=function(d){return h(d)&&K(d,
+f)&&K(d[f],this.g)};c.prototype.delete=function(d){return h(d)&&K(d,f)&&K(d[f],this.g)?delete d[f][this.g]:!1};return c});
+x("Map",function(b){function c(){var a={};return a.m=a.next=a.head=a}function g(a,d){var e=a[1];return J(function(){if(e){for(;e.head!=a[1];)e=e.m;for(;e.next!=e.head;)return e=e.next,{done:!1,value:d(e)};e=null}return{done:!0,value:void 0}})}function h(a,d){var e=d&&typeof d;e=="object"||e=="function"?m.has(d)?e=m.get(d):(e=""+ ++f,m.set(d,e)):e="p_"+d;var k=a[0][e];if(k&&K(a[0],e))for(a=0;a<k.length;a++){var p=k[a];if(d!==d&&p.key!==p.key||d===p.key)return{id:e,list:k,index:a,entry:p}}return{id:e,
+list:k,index:-1,entry:void 0}}function l(a){this[0]={};this[1]=c();this.size=0;if(a){a=t(a);for(var d;!(d=a.next()).done;)d=d.value,this.set(d[0],d[1])}}if(function(){if(!b||typeof b!="function"||!b.prototype.entries||typeof Object.seal!="function")return!1;try{var a=Object.seal({x:4}),d=new b(t([[a,"s"]]));if(d.get(a)!="s"||d.size!=1||d.get({x:4})||d.set({x:4},"t")!=d||d.size!=2)return!1;var e=d.entries(),k=e.next();if(k.done||k.value[0]!=a||k.value[1]!="s")return!1;k=e.next();return k.done||k.value[0].x!=
+4||k.value[1]!="t"||!e.next().done?!1:!0}catch(p){return!1}}())return b;var m=new WeakMap;l.prototype.set=function(a,d){a=a===0?0:a;var e=h(this,a);e.list||(e.list=this[0][e.id]=[]);e.entry?e.entry.value=d:(e.entry={next:this[1],m:this[1].m,head:this[1],key:a,value:d},e.list.push(e.entry),this[1].m.next=e.entry,this[1].m=e.entry,this.size++);return this};l.prototype.delete=function(a){a=h(this,a);return a.entry&&a.list?(a.list.splice(a.index,1),a.list.length||delete this[0][a.id],a.entry.m.next=a.entry.next,
+a.entry.next.m=a.entry.m,a.entry.head=null,this.size--,!0):!1};l.prototype.clear=function(){this[0]={};this[1]=this[1].m=c();this.size=0};l.prototype.has=function(a){return!!h(this,a).entry};l.prototype.get=function(a){return(a=h(this,a).entry)&&a.value};l.prototype.entries=function(){return g(this,function(a){return[a.key,a.value]})};l.prototype.keys=function(){return g(this,function(a){return a.key})};l.prototype.values=function(){return g(this,function(a){return a.value})};l.prototype.forEach=
+function(a,d){for(var e=this.entries(),k;!(k=e.next()).done;)k=k.value,a.call(d,k[1],k[0],this)};l.prototype[Symbol.iterator]=l.prototype.entries;var f=0;return l});
+x("Set",function(b){function c(g){this.g=new Map;if(g){g=t(g);for(var h;!(h=g.next()).done;)this.add(h.value)}this.size=this.g.size}if(function(){if(!b||typeof b!="function"||!b.prototype.entries||typeof Object.seal!="function")return!1;try{var g=Object.seal({x:4}),h=new b(t([g]));if(!h.has(g)||h.size!=1||h.add(g)!=h||h.size!=1||h.add({x:4})!=h||h.size!=2)return!1;var l=h.entries(),m=l.next();if(m.done||m.value[0]!=g||m.value[1]!=g)return!1;m=l.next();return m.done||m.value[0]==g||m.value[0].x!=4||
+m.value[1]!=m.value[0]?!1:l.next().done}catch(f){return!1}}())return b;c.prototype.add=function(g){g=g===0?0:g;this.g.set(g,g);this.size=this.g.size;return this};c.prototype.delete=function(g){g=this.g.delete(g);this.size=this.g.size;return g};c.prototype.clear=function(){this.g.clear();this.size=0};c.prototype.has=function(g){return this.g.has(g)};c.prototype.entries=function(){return this.g.entries()};c.prototype.values=function(){return this.g.values()};c.prototype.keys=c.prototype.values;c.prototype[Symbol.iterator]=
+c.prototype.values;c.prototype.forEach=function(g,h){var l=this;this.g.forEach(function(m){return g.call(h,m,m,l)})};return c});(function(){function b(){return m?Promise.resolve(m):f?f:f=fetch("https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json").then(function(a){if(!a.ok)throw Error("HTTP error! status: "+a.status+" fetching https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json");return a.json()}).then(function(a){if(!Array.isArray(a))throw new TypeError("Fetched icon names from https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json is not an array.");
+return m=a}).catch(function(a){console.error("IconChecker: Failed to load valid icon names from https://www.gstatic.com/bard-maui/resources/material-design-icon-names.804824289.json.",a);f=null;throw a;})}function c(a){var d,e,k,p;return I(new H(new B(function(n){switch(n.h){case 1:d=(a.textContent||"").trim();if(!d||a.classList.contains("js-replaced-missing-icon")&&d==="radio_button_unchecked")return n.return();e=window.getComputedStyle(a);if(e.display==="none"||e.visibility==="hidden")return n.return();
+n.l=2;var r=b();n.h=4;return{value:r};case 4:k=n.u;n.h=3;n.l=0;break;case 2:return n.l=0,n.i=null,console.warn('IconChecker: Skipping check for icon "'+d+'" as valid names could not be loaded.'),n.return();case 3:(p=k.includes(d))?a.classList.contains("js-replaced-missing-icon")&&a.classList.remove("js-replaced-missing-icon"):d==="radio_button_unchecked"&&a.classList.contains("js-replaced-missing-icon")||(a.textContent="radio_button_unchecked",a.classList.add("js-replaced-missing-icon")),n.h=0}})))}
+function g(a){a=a===void 0?document.body:a;a.querySelectorAll(l).forEach(function(d){c(d)})}function h(){b().catch(function(){});document.fonts.ready.then(function(){requestAnimationFrame(function(){g(document.body);(new MutationObserver(function(a){var d=new Set;a=t(a);for(var e=a.next();!e.done;e=a.next())if(e=e.value,e.type==="childList")e.addedNodes.forEach(function(p){p.nodeType===Node.ELEMENT_NODE&&(p.matches(l)&&d.add(p),p.querySelectorAll(l).forEach(function(n){d.add(n)}))});else if(e.type===
+"attributes"&&e.attributeName==="class"){var k=e.target;e.target.nodeType===Node.ELEMENT_NODE&&k.matches(l)&&d.add(k)}else e.type==="characterData"&&e.target.parentNode&&(e=e.target.parentNode,e.nodeType===Node.ELEMENT_NODE&&e.matches(l)&&d.add(e));d.size>0&&setTimeout(function(){d.forEach(function(p){c(p)})},500)})).observe(document.body,{childList:!0,subtree:!0,attributes:!0,attributeFilter:["class"],characterData:!0})})}).catch(function(a){console.error("IconChecker: Font loading error. Scanning icons anyway.",
+a);requestAnimationFrame(function(){g(document.body)})})}var l=["material-icons","material-symbols-outlined","material-symbols-rounded","material-symbols-sharp"].map(function(a){return"."+a}).join(","),m=null,f=null;document.readyState==="loading"?document.addEventListener("DOMContentLoaded",function(){h()}):h()})();}).call(this);
+
+</script>
+
+
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MathMaster - חדו"א 1: סדרות וחסמים</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&amp;family=STIX+Two+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+<style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --accent-cyan: #58C4DD;
+            --accent-yellow: #FFFF00;
+            --accent-green: #83C167;
+            --accent-red: #FC6255;
+            --accent-purple: #9A72AC;
+        }
+
         body {
-            font-family: 'Assistant', sans-serif;
-            background-color: #f3f4f6;
-            user-select: none;
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            overflow-x: hidden;
         }
 
-        /* --- Scrollbar Styling --- */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
-
-        /* --- Game Styles --- */
-        .drop-zone {
+        .math-font { font-family: 'STIX Two Text', serif; }
+        .m-var { font-style: italic; }
+        .m-op { font-style: normal; }
+        
+        .lim-stack {
             display: inline-flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-width: 50px;
-            height: auto;
-            min-height: 50px; /* Increased slightly for taller limits */
-            border-bottom: 2px dashed #3b82f6;
-            margin: 3px;
             vertical-align: middle;
-            background-color: #eef2ff;
-            border-radius: 6px;
-            transition: all 0.2s;
-            text-align: center;
-            padding: 4px 8px;
-            cursor: pointer;
-            line-height: 1.4;
-            font-size: 0.95rem; /* Slightly larger text */
+            margin: 0 4px;
         }
+        .lim-stack .top { font-size: 1em; line-height: 1; }
+        .lim-stack .bottom { font-size: 0.7em; line-height: 1; margin-top: 4px; }
 
-        .drop-zone:empty::before {
-            content: "__";
-            color: #bfdbfe;
-        }
-
-        .drop-zone.hovered {
-            background-color: #dbeafe;
-            border-color: #1d4ed8;
-            transform: scale(1.05);
-        }
-
-        .drop-zone.correct {
-            border-bottom: 2px solid #22c55e;
-            background-color: #dcfce7;
-            color: #15803d;
-        }
-
-        .drop-zone.wrong {
-            border-bottom: 2px solid #ef4444;
-            background-color: #fee2e2;
-            animation: shake 0.5s;
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
         }
 
         .draggable-item {
             cursor: grab;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            user-select: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            unicode-bidi: embed;
         }
+        .draggable-item:active { cursor: grabbing; transform: scale(1.05); z-index: 50; }
+        .draggable-item.dragging { opacity: 0.5; border: 2px dashed var(--accent-cyan); }
+
+        .drop-zone { transition: all 0.3s ease; }
+        .drop-zone.drag-over { background-color: rgba(88, 196, 221, 0.1); border-color: var(--accent-cyan); }
+
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px var(--accent-yellow); } 50% { box-shadow: 0 0 20px var(--accent-yellow); } }
+        .correct-glow { animation: glow 1.5s infinite; border-color: var(--accent-green) !important; background-color: rgba(131, 193, 103, 0.1) !important; }
         
-        .draggable-item:active {
-            cursor: grabbing;
-        }
+        @keyframes shake { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-4px); } 40%, 60% { transform: translateX(4px); } }
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; border-color: var(--accent-red) !important; }
 
-        .draggable-item.selected {
-            background-color: #bfdbfe;
-            border-color: #3b82f6;
-            transform: scale(1.05);
-        }
+        .custom-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #2d2d2d; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
 
-        /* MathJax overrides */
-        mjx-container {
-            font-size: 110% !important;
-        }
-
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
+        .level-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.5); border-color: var(--accent-cyan); }
         
-        .fade-in {
-            animation: fadeIn 0.3s ease-in;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Menu Card Hover */
-        .level-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        .math-expr { direction: ltr; display: inline-block; unicode-bidi: embed; }
     </style>
-</head>
-<body class="flex flex-col h-screen overflow-hidden">
-
-    <!-- Header -->
-    <header class="bg-white shadow-md p-3 md:p-4 flex justify-between items-center z-10 shrink-0">
-        <div class="flex items-center gap-4">
-            <button onclick="showMenu()" class="text-blue-600 hover:text-blue-800 transition font-semibold flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full border border-blue-100 text-sm md:text-base">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125h19.5M2.25 12h19.5M2.25 16.875h19.5" />
-                </svg>
-                תפריט ראשי
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.absolute{position:absolute}.relative{position:relative}.-top-3{top:-0.75rem}.right-4{right:1rem}.bottom-0{bottom:0px}.left-0{left:0px}.z-10{z-index:10}.mx-auto{margin-left:auto;margin-right:auto}.mb-10{margin-bottom:2.5rem}.mb-3{margin-bottom:0.75rem}.mb-6{margin-bottom:1.5rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-8{margin-top:2rem}.mb-4{margin-bottom:1rem}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-6{height:1.5rem}.h-8{height:2rem}.h-1{height:0.25rem}.max-h-\[220px\]{max-height:220px}.min-h-\[140px\]{min-height:140px}.min-h-screen{min-height:100vh}.w-full{width:100%}.w-5\/6{width:83.333333%}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.flex-grow{flex-grow:1}.translate-y-2{--tw-translate-y:0.5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.content-center{align-content:center}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-start{justify-content:flex-start}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-6{gap:1.5rem}.space-y-12 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(3rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(3rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.rounded-md{border-radius:0.375rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128 / var(--tw-border-opacity, 1))}.border-gray-600{--tw-border-opacity:1;border-color:rgb(75 85 99 / var(--tw-border-opacity, 1))}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.border-red-900\/50{border-color:rgb(127 29 29 / 0.5)}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81 / var(--tw-bg-opacity, 1))}.bg-gray-800\/50{background-color:rgb(31 41 55 / 0.5)}.bg-gray-800\/80{background-color:rgb(31 41 55 / 0.8)}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-gray-900\/60{background-color:rgb(17 24 39 / 0.6)}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-red-900\/10{background-color:rgb(127 29 29 / 0.1)}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 211 238 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-600{--tw-gradient-from:#16a34a var(--tw-gradient-from-position);--tw-gradient-to:rgb(22 163 74 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-gray-700{--tw-gradient-from:#374151 var(--tw-gradient-from-position);--tw-gradient-to:rgb(55 65 81 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-blue-600{--tw-gradient-to:#2563eb var(--tw-gradient-to-position)}.to-teal-600{--tw-gradient-to:#0d9488 var(--tw-gradient-to-position)}.to-gray-600{--tw-gradient-to:#4b5563 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pb-6{padding-bottom:1.5rem}.pt-4{padding-top:1rem}.pt-8{padding-top:2rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-light{font-weight:300}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.italic{font-style:italic}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-cyan-400{--tw-text-opacity:1;color:rgb(34 211 238 / var(--tw-text-opacity, 1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.text-teal-400{--tw-text-opacity:1;color:rgb(45 212 191 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.drop-shadow-lg{--tw-drop-shadow:drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:-translate-y-1:hover{--tw-translate-y:-0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:scale-105:hover{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:bg-gray-600:hover{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-500:hover{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.hover\:from-green-500:hover{--tw-gradient-from:#22c55e var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 197 94 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:to-teal-500:hover{--tw-gradient-to:#14b8a6 var(--tw-gradient-to-position)}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:from-cyan-500{--tw-gradient-from:#06b6d4 var(--tw-gradient-from-position);--tw-gradient-to:rgb(6 182 212 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.group:hover .group-hover\:to-blue-500{--tw-gradient-to:#3b82f6 var(--tw-gradient-to-position)}.group:hover .group-hover\:text-purple-400{--tw-text-opacity:1;color:rgb(192 132 252 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:text-teal-400{--tw-text-opacity:1;color:rgb(45 212 191 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}}@media (min-width: 768px){.md\:w-auto{width:auto}.md\:flex-row{flex-direction:row}.md\:p-8{padding:2rem}.md\:text-2xl{font-size:1.5rem;line-height:2rem}.md\:text-6xl{font-size:3.75rem;line-height:1}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}@media (min-width: 1280px){.xl\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}}</style></head>
+<body class="flex flex-col min-h-screen">
+<canvas id="confetti-canvas" width="1053" height="492"></canvas>
+<div class="bg-grid"></div>
+<!-- MAIN CONTAINER -->
+<main class="flex-grow w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col items-center">
+<!-- HEADER -->
+<header class="w-full text-center mb-10">
+<h1 class="text-4xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-600 pb-2 cursor-pointer hover:scale-105 transition duration-300" onclick="showMenu()">
+                MathMaster
+            </h1>
+<p class="text-gray-400 text-lg mt-2">תרגול הגדרות ומשפטים: חסמים וסדרות</p>
+</header>
+<!-- VIEW: MENU -->
+<div class="w-full space-y-12 animate-fade-in" id="menu-view">
+<!-- SECTION 1: SETS & BOUNDS -->
+<section>
+<div class="flex items-center gap-3 mb-6 border-b border-gray-700 pb-3">
+<span class="material-symbols-outlined text-purple-400 text-4xl">dataset</span>
+<h2 class="text-3xl font-bold text-purple-400">חסמים וקבוצות</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="grid-sets"><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">חסם מלעיל</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#1</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">מקסימום של קבוצה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#2</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">הגדרת הסופרימום (חסם עליון)</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#3</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">תכונת האפסילון של הסופרימום</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#4</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">חסם מלרע</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#5</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">אינפימום (חסם תחתון)</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#6</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">תכונת האפסילון של האינפימום</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#7</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-purple-400 transition w-5/6">קבוצה חסומה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#8</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div></div>
+</section>
+<!-- SECTION 2: SEQUENCES & LIMITS -->
+<section>
+<div class="flex items-center gap-3 mb-6 border-b border-gray-700 pb-3">
+<span class="material-symbols-outlined text-teal-400 text-4xl">ssid_chart</span>
+<h2 class="text-3xl font-bold text-teal-400">סדרות וגבולות</h2>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5" id="grid-sequences"><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">הגדרת גבול של סדרה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#9</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">סדרה חסומה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#10</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">משפט היחידות</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#11</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">התכנסות גוררת חסימות</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#12</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">שאיפה לאינסוף</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#13</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">סדרה אפסה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#14</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">אריתמטיקה: סכום</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#15</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">אריתמטיקה: מכפלה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#16</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">גבול הערך המוחלט</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#17</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">כלל הסנדוויץ'</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#18</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">מונוטונית עולה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#19</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">התכנסות מונוטונית</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#20</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">תת-סדרה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#21</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">גבול של תת-סדרה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#22</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">משפט בולצאנו-ויירשטראס</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#23</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">סדרה הנדסית</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#24</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">סדרת קושי (הגדרה)</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#25</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">קריטריון קושי להתכנסות</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#26</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">מבחן המנה (התכנסות)</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#27</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">מבחן השורש (התבדרות)</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#28</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">מכפלת אפסה בחסומה</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#29</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div><div class="level-card bg-gray-800 border border-gray-700 p-4 rounded-xl cursor-pointer relative overflow-hidden group">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:text-teal-400 transition w-5/6">הלמה של קנטור</h3>
+                        <span class="material-symbols-outlined text-gray-600">play_circle</span>
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#30</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500"></div>
+                </div></div>
+</section>
+<!-- DOWNLOAD BUTTON AREA -->
+<!-- <div class="flex justify-center mt-12 pt-8 border-t border-gray-700 w-full">
+<button class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg font-medium transition flex items-center gap-2" onclick="downloadPage()">
+<span class="material-symbols-outlined">download</span>
+                הורד דף (index.html)
             </button>
-            <div>
-                <h1 class="text-lg md:text-xl font-bold text-gray-800 hidden md:block">משחק הגדרות ומשפטים</h1>
-                <p class="text-xs md:text-sm text-gray-500 hidden md:block">אינפי 1מ' - מבוא וסדרות</p>
-            </div>
-        </div>
-        <div id="game-status" class="flex items-center gap-4 hidden">
-            <div class="text-base md:text-lg font-semibold text-blue-600">
-                שלב <span id="level-indicator">1</span>
-            </div>
-        </div>
-    </header>
+</div>
+</div>-->
+<!-- VIEW: GAME -->
+<div class="w-full max-w-4xl flex flex-col gap-6 hidden" id="game-view">
+<!-- Navigation -->
+<div class="flex justify-between items-center w-full bg-gray-800/50 p-3 rounded-xl border border-gray-700">
+<button class="text-gray-300 hover:text-white flex items-center gap-2 transition" onclick="showMenu()">
+<span class="material-symbols-outlined">arrow_forward</span>
+                    חזרה לתפריט
+                </button>
+<span class="font-mono text-cyan-400 font-bold" id="level-indicator">שלב 1/30</span>
+</div>
+<!-- Game Board -->
+<div class="bg-gray-800/80 backdrop-blur-md border border-gray-600 rounded-2xl p-6 shadow-2xl relative">
+<!-- Intro Text -->
+<div class="text-center border-b border-gray-700 pb-6 mb-6">
+<h2 class="text-2xl font-bold text-white mb-3" id="game-title">חסם מלעיל</h2>
+<div class="text-xl md:text-2xl text-gray-300 math-font dir-ltr" id="game-intro">מספר ממשי <span class="math-font m-var">M</span> נקרא חסם מלעיל של קבוצה <span class="math-font m-var">A</span> אם:</div>
+</div>
+<!-- Drop Zone -->
+<div class="space-y-4">
+<div class="h-8 text-center opacity-0 transition-all duration-300 translate-y-2" id="success-msg">
+<span class="text-green-400 font-bold text-xl drop-shadow-lg">✨ נכון מאוד! ✨</span>
+</div>
+<div class="relative group">
+<div class="absolute -top-3 right-4 bg-gray-700 px-2 text-xs text-cyan-400 font-bold tracking-widest uppercase border border-gray-600 rounded z-10">
+                            איזור הבנייה
+                        </div>
+<div class="drop-zone min-h-[140px] bg-gray-900/60 border-2 border-dashed border-gray-500 rounded-xl p-6 flex flex-wrap gap-3 items-center justify-start content-center" id="target-zone" ondragover="allowDrop(event)" ondrop="drop(event)">
+<span class="text-gray-500 w-full text-center pointer-events-none select-none italic" id="placeholder-text" style="display: flex;">
+                                גררו לכאן את הרכיבים...
+                            </span>
+</div>
+</div>
+</div>
+<!-- Word Bank -->
+<div class="mt-8 space-y-3">
+<div class="flex justify-between items-center px-2">
+<h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">inventory_2</span>
+                            מחסן מילים
+                        </h3>
+<span class="text-xs text-red-400 font-light border border-red-900/50 px-2 py-1 rounded bg-red-900/10">
+                            * היזהרו ממסיחים
+                        </span>
+</div>
+<div class="drop-zone custom-scroll bg-gray-900 border border-gray-700 rounded-xl p-4 flex flex-wrap gap-3 items-center justify-center max-h-[220px] overflow-y-auto" id="source-zone" ondragover="allowDrop(event)" ondrop="drop(event)"><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="p3" data-type="correct">מתקיים</div><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="p4" data-type="correct"><span class="math-expr">x ≤ M</span></div><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="d-1" data-type="distractor">קיים x</div><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="d-2" data-type="distractor"><span class="math-expr">x &lt; M</span></div><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="p1" data-type="correct">לכל</div><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="d-3" data-type="distractor">לכל M</div><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="d-0" data-type="distractor"><span class="math-expr">x ≥ M</span></div><div class="draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg" draggable="true" id="p2" data-type="correct"><span class="math-expr">x ∈ A</span></div></div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col md:flex-row gap-4 justify-center items-center mt-8 pt-4 border-t border-gray-700">
+<button class="w-full md:w-auto px-8 py-3 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white rounded-lg font-bold shadow-lg transform hover:-translate-y-1 transition flex items-center justify-center gap-2" onclick="checkAnswer()">
+<span class="material-symbols-outlined">check_circle</span> בדיקה
+                    </button>
+<button class="w-full md:w-auto px-6 py-3 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg font-medium transition flex items-center justify-center gap-2" onclick="resetLevel()">
+<span class="material-symbols-outlined">restart_alt</span> נקה
+                    </button>
+<button class="hidden w-full md:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg font-bold transition flex items-center justify-center gap-2 animate-pulse" id="next-btn" onclick="nextLevel()">
+                        לשלב הבא <span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+<!-- Feedback -->
+<div class="h-6 mt-2 flex items-center justify-center text-lg font-bold transition-opacity duration-300 opacity-0" id="feedback-area" style="opacity: 0;"></div>
+</div>
+</div>
+</main>
+<script>
+        // --- 1. Math Helpers ---
+        const ltr = (str) => `<span class="math-expr">${str}</span>`;
+        const epsilon = `<span class="math-font m-var">&epsilon;</span>`;
+        const delta = `<span class="math-font m-var">&delta;</span>`;
+        const N_cap = `<span class="math-font m-var">N</span>`;
+        const M_cap = `<span class="math-font m-var">M</span>`;
+        const abs = (x) => `|${x}|`;
+        const lim = (sub, val, seq, res) => `
+            <div class="inline-flex items-center mx-1 math-font" style="direction:ltr">
+                <div class="lim-stack">
+                    <span class="top m-op">lim</span>
+                    <span class="bottom m-var text-xs">${sub}&rarr;${val}</span>
+                </div>
+                <span class="ml-1">${seq} = ${res}</span>
+            </div>`;
 
-    <!-- Main Content -->
-    <main class="flex-grow flex flex-col items-center justify-center p-2 md:p-4 relative w-full max-w-6xl mx-auto overflow-hidden">
+        // --- 2. Levels Data (30 Levels) ---
+        // Each 'valid' entry is an array of acceptable sequences of IDs.
+        // Parts are now objects with id and content.
         
-        <!-- MENU SCREEN -->
-        <div id="menu-screen" class="w-full h-full overflow-y-auto pr-2 fade-in">
-            <div class="text-center mb-6 mt-4">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">בחרו כרטיס כדי להתאמן על ניסוח הגדרות ומשפטים</h2>
-                <p class="text-gray-600"> בכל שלב ניתן לחזור למסך הראשי על ידי לחיצה על כפתור תפריט ראשי (למעלה מימין)</p>
-            </div>
-            
-            <div id="levels-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-8">
-                <!-- Grid items injected via JS -->
-            </div>
-        </div>
-
-        <!-- GAME BOARD SCREEN -->
-        <div id="game-board" class="hidden bg-white rounded-xl shadow-lg p-4 md:p-8 w-full h-full flex flex-col fade-in relative overflow-y-auto max-h-full">
-            
-            <!-- Instructions -->
-            <div class="mb-4 text-center text-gray-600 font-medium text-sm md:text-base shrink-0">
-                נסחו במדויק את ההגדרה או המשפט.
-            </div>
-
-            <!-- The Theorem/Definition Text Area -->
-            <div class="flex-grow flex items-center justify-center py-4">
-                <div class="text-lg md:text-xl leading-relaxed text-gray-800 text-center flex flex-wrap justify-center gap-y-3 gap-x-1" id="sentence-container">
-                    <!-- Content injected via JS -->
-                </div>
-            </div>
-
-            <!-- Feedback Message -->
-            <div id="feedback" class="h-8 text-center font-bold text-lg mb-2 shrink-0"></div>
-
-            <!-- Word Bank -->
-            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 shrink-0">
-                <h3 class="text-xs font-semibold text-gray-500 mb-2">מחסן מילים:</h3>
-                <div id="word-bank" class="flex flex-wrap gap-2 justify-center min-h-[60px]">
-                    <!-- Draggables injected via JS -->
-                </div>
-            </div>
-
-            <!-- Controls -->
-            <div class="mt-4 flex justify-center gap-4 shrink-0 pb-2">
-                <button onclick="resetLevel()" class="px-5 py-2 rounded-full border border-gray-300 text-gray-600 hover:bg-gray-100 transition text-sm">
-                    נקה הכל
-                </button>
-                <button onclick="checkAnswer()" class="px-8 py-2 rounded-full bg-blue-600 text-white font-bold hover:bg-blue-700 shadow-md transition transform hover:scale-105">
-                    בדיקה
-                </button>
-                <button id="next-btn" onclick="nextLevel()" class="hidden px-8 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-700 shadow-md transition animate-bounce">
-                    לשלב הבא &larr;
-                </button>
-            </div>
-        </div>
-
-        <!-- Completion Modal (End of all levels) -->
-        <div id="end-screen" class="hidden absolute inset-0 bg-white z-50 flex flex-col items-center justify-center text-center p-8">
-            <h2 class="text-4xl font-bold text-blue-600 mb-4">סיימת את כל 30 השלבים!</h2>
-            <p class="text-xl text-gray-600 mb-8">כל הכבוד, עמדת במשימת ניסוח ההגדרות והמשפטים</p>
-            <button onclick="showMenu()" class="px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-bold hover:bg-blue-700 shadow-lg">
-                חזרה לתפריט
-            </button>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-100 p-2 text-center text-gray-500 text-xs shrink-0">
-        נוצר בהשראת MathSlides | תואם סילבוס אינפי 1מ'
-    </footer>
-
-    <script>
-        // --- Game Data (30 Levels - Granular Split & Fixed Limits with \limits) ---
         const levels = [
-            // --- שבוע 1: מספרים ממשיים ---
+            // --- SETS & BOUNDS ---
             {
-                id: 1,
-                title: "משפט איפיון לסופרמום",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}} {{10}} {{11}} {{12}}`,
-                answers: ["תהי", "$A$ קבוצה", "חסומה מלעיל.", "$M$ הוא סופרמום", "אם", "הוא חסם מלעיל", "וגם", "לכל", "$\\varepsilon > 0$", "קיים", "$a \\in A$", "כך ש-", "$a > M - \\varepsilon$."],
-                distractors: ["חסם מלרע", "קיים", "$a < M$", "לכל", "אזי"]
+                id: 1, category: 'sets', title: "חסם מלעיל",
+                intro: `מספר ממשי <span class="math-font m-var">M</span> נקרא חסם מלעיל של קבוצה <span class="math-font m-var">A</span> אם:`,
+                parts: [
+                    { id: 'p1', txt: "לכל" }, { id: 'p2', txt: ltr("x &in; A") },
+                    { id: 'p3', txt: "מתקיים" }, { id: 'p4', txt: ltr("x &le; M") }
+                ],
+                valid: [['p1','p2','p3','p4']],
+                distractors: [ltr("x &ge; M"), "קיים x", ltr("x < M"), "לכל M"]
             },
             {
-                id: 2,
-                title: "משפט איפיון לאינפימום",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}} {{10}} {{11}} {{12}}`,
-                answers: ["תהי", "$A$ קבוצה", "חסומה מלרע.", "$m$ הוא אינפימום", "אם", "הוא חסם מלרע", "וגם", "לכל", "$\\varepsilon > 0$", "קיים", "$a \\in A$", "כך ש-", "$a < m + \\varepsilon$."],
-                distractors: ["חסם מלעיל", "קיים", "$a > m$", "לכל", "אזי"]
+                id: 2, category: 'sets', title: "מקסימום של קבוצה",
+                intro: `המספר <span class="math-font m-var">m</span> הוא המקסימום של הקבוצה <span class="math-font m-var">A</span> אם:`,
+                parts: [
+                    { id: 'p1', txt: "m הוא חסם מלעיל של A" }, { id: 'p2', txt: "וגם" }, { id: 'p3', txt: ltr("m &in; A") }
+                ],
+                valid: [['p1','p2','p3'], ['p3','p2','p1']], // Both orders valid
+                distractors: ["m הוא חסם מלרע", ltr("m &notin; A"), "m הוא סופרימום בלבד", "לכל x"]
             },
             {
-                id: 3,
-                title: "הגדרת מקסימום לקבוצה",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}}`,
-                answers: ["$M$ הוא מקסימום", "של קבוצה $A$", "אם", "$M \\in A$", "וגם", "$M$ הוא", "חסם מלעיל של $A$."],
-                distractors: ["$M \\notin A$", "חסם מלרע", "אינפימום", "סופרמום", "אזי"]
+                id: 3, category: 'sets', title: "הגדרת הסופרימום (חסם עליון)",
+                intro: `המספר <span class="math-font m-var">S</span> הוא הסופרימום של <span class="math-font m-var">A</span> (מסומן sup A) אם:`,
+                parts: [
+                    { id: 'p1', txt: "S הוא חסם מלעיל של A" }, { id: 'p2', txt: "ו-" },
+                    { id: 'p3', txt: "לכל חסם מלעיל אחר M" }, { id: 'p4', txt: "מתקיים" }, { id: 'p5', txt: ltr("S &le; M") }
+                ],
+                // Complex sentence, usually fixed order, but "S is upper bound" can swap with the second condition block
+                valid: [
+                    ['p1','p2','p3','p4','p5'],
+                    ['p3','p4','p5','p2','p1']
+                ],
+                distractors: [ltr("S &ge; M"), ltr("S &in; A"), "S הוא המקסימום", "לכל x"]
             },
             {
-                id: 4,
-                title: "שלילת חסימות מלעיל (הגדרה)",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}}`,
-                answers: ["קבוצה $A$", "אינה חסומה מלעיל", "אם", "לכל", "$M \\in \\mathbb{R}$", "קיים", "$a \\in A$", "כך ש-", "$a > M$."],
-                distractors: ["קיים", "חסומה מלרע", "לכל", "$a < M$", "חסם מלעיל"]
+                id: 4, category: 'sets', title: "תכונת האפסילון של הסופרימום",
+                intro: `תהי <span class="math-font m-var">A</span> חסומה מלעיל ו-<span class="math-font m-var">S = sup A</span>. אזי:`,
+                parts: [
+                    { id: 'p1', txt: "לכל" }, { id: 'p2', txt: ltr(epsilon + " > 0") },
+                    { id: 'p3', txt: "קיים" }, { id: 'p4', txt: ltr("x &in; A") },
+                    { id: 'p5', txt: "כך ש-" }, { id: 'p6', txt: ltr("x > S - " + epsilon) }
+                ],
+                valid: [['p1','p2','p3','p4','p5','p6']],
+                distractors: [ltr("x < S - " + epsilon), "לכל x", ltr("x > S + " + epsilon), "קיים " + epsilon]
             },
             {
-                id: 5,
-                title: "תכונת ארכימדס",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["לכל", "$x \\in \\mathbb{R}$", "קיים", "$n \\in \\mathbb{N}$", "כך ש-", "$n > x$."],
-                distractors: ["קיים", "לכל", "רציונלי", "כך ש- $n < x$"]
+                id: 5, category: 'sets', title: "חסם מלרע",
+                intro: `מספר ממשי <span class="math-font m-var">m</span> נקרא חסם מלרע של <span class="math-font m-var">A</span> אם:`,
+                parts: [
+                    { id: 'p1', txt: "לכל" }, { id: 'p2', txt: ltr("x &in; A") },
+                    { id: 'p3', txt: "מתקיים" }, { id: 'p4', txt: ltr("x &ge; m") }
+                ],
+                valid: [['p1','p2','p3','p4']],
+                distractors: [ltr("x &le; m"), "קיים x", ltr("m &in; A"), ltr("m > x")]
             },
             {
-                id: 6,
-                title: "אי-שוויון המשולש",
-                template: `{{0}} {{1}} {{2}} {{3}}`,
-                answers: ["לכל", "$a,b \\in \\mathbb{R}$", "מתקיים", "$|a+b| \\le |a| + |b|$."],
-                distractors: ["$|a+b| \\ge |a| + |b|$", "קיים", "$|a+b| = |a| + |b|$"]
-            },
-
-            // --- שבוע 2: גבולות של סדרות ---
-            {
-                id: 7,
-                title: "הגדרת גבול סופי של סדרה",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}} {{10}}`,
-                answers: ["$L$ הוא הגבול", "אם", "לכל", "$\\varepsilon > 0$", "קיים", "$N$", "כך ש-", "לכל", "$n > N$", "מתקיים", "$|a_n - L| < \\varepsilon$."],
-                distractors: ["קיים", "$\\varepsilon$", "לכל", "$|a_n - L| > \\varepsilon$"]
+                id: 6, category: 'sets', title: "אינפימום (חסם תחתון)",
+                intro: `המספר <span class="math-font m-var">I</span> הוא האינפימום של <span class="math-font m-var">A</span> אם:`,
+                parts: [
+                    { id: 'p1', txt: "I הוא חסם מלרע של A" }, { id: 'p2', txt: "ו-" },
+                    { id: 'p3', txt: "I הוא הגדול ביותר" }, { id: 'p4', txt: "מבין כל החסמים מלרע" }
+                ],
+                valid: [
+                    ['p1','p2','p3','p4'],
+                    ['p3','p4','p2','p1']
+                ],
+                distractors: ["I הוא הקטן ביותר", ltr("I &in; A"), ltr("I &le; x"), "מקסימום"]
             },
             {
-                id: 8,
-                title: "שלילת הגדרת הגבול (L אינו הגבול)",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}} {{10}}`,
-                answers: ["$L$ אינו הגבול", "אם", "קיים", "$\\varepsilon > 0$", "כך ש-", "לכל", "$N$", "קיים", "$n > N$", "שעבורו", "$|a_n - L| \\ge \\varepsilon$."],
-                distractors: ["לכל", "קיים", "$n < N$", "$|a_n - L| < \\varepsilon$", "סופרמום"]
+                id: 7, category: 'sets', title: "תכונת האפסילון של האינפימום",
+                intro: `תהי <span class="math-font m-var">A</span> חסומה מלרע ו-<span class="math-font m-var">I = inf A</span>. אזי:`,
+                parts: [
+                    { id: 'p1', txt: "לכל" }, { id: 'p2', txt: ltr(epsilon + " > 0") },
+                    { id: 'p3', txt: "קיים" }, { id: 'p4', txt: ltr("x &in; A") },
+                    { id: 'p5', txt: "כך ש-" }, { id: 'p6', txt: ltr("x < I + " + epsilon) }
+                ],
+                valid: [['p1','p2','p3','p4','p5','p6']],
+                distractors: [ltr("x > I + " + epsilon), ltr("x < I - " + epsilon), "לכל x", "קיים " + epsilon]
             },
             {
-                id: 9,
-                title: "הגדרת גבול באינסוף (שאיפה לפלוס אינסוף)",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
-                answers: ["$\\lim\\limits_{n \\to \\infty} a_n = \\infty$", "אם", "לכל", "$M > 0$", "קיים", "$N$", "כך ש-", "לכל", "$n > N$", "מתקיים $a_n > M$."],
-                distractors: ["קיים", "$M$", "לכל", "$a_n < M$", "$|a_n| > M$"]
-            },
-            {
-                id: 10,
-                title: "יחידות הגבול",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["אם", "סדרה $a_n$", "מתכנסת,", "אזי", "גבולה", "הוא יחיד."],
-                distractors: ["יש לה שני גבולות", "היא אינה חסומה", "מתבדרת"]
-            },
-            {
-                id: 11,
-                title: "משפט: התכנסות גוררת חסימות",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["כל", "סדרה", "מתכנסת", "היא", "חסומה."],
-                distractors: ["מתבדרת", "מונוטונית", "אינה חסומה", "קבועה", "אם"]
-            },
-            {
-                id: 12,
-                title: "משפט הסנדוויץ'",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["תהיינה", "$a_n \\le b_n \\le c_n$", "אם", "$\\lim\\limits_{n \\to \\infty} a_n = \\lim\\limits_{n \\to \\infty} c_n = L$", "אזי", "$\\lim\\limits_{n \\to \\infty} b_n = L$."],
-                distractors: ["$\\lim\\limits_{n \\to \\infty} b_n = 0$", "או", "לכל $n > N$"]
-            },
-            {
-                id: 13,
-                title: "אריתמטיקה של גבולות (מכפלה)",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["אם", "$a_n \\to A$", "ו-", "$b_n \\to B$", "אזי", "$a_n \\cdot b_n \\to A \\cdot B$."],
-                distractors: ["$a_n \\cdot b_n \\to A + B$", "או", "$\\frac{a_n}{b_n} \\to A \\cdot B$"]
+                id: 8, category: 'sets', title: "קבוצה חסומה",
+                intro: `קבוצה <span class="math-font m-var">A</span> נקראת חסומה אם:`,
+                parts: [
+                    { id: 'p1', txt: "קיים" }, { id: 'p2', txt: ltr(M_cap + " > 0") },
+                    { id: 'p3', txt: "כך שלכל" }, { id: 'p4', txt: ltr("x &in; A") },
+                    { id: 'p5', txt: "מתקיים" }, { id: 'p6', txt: ltr(abs("x") + " &le; " + M_cap) }
+                ],
+                valid: [['p1','p2','p3','p4','p5','p6']],
+                distractors: ["לכל " + M_cap, ltr("x &le; " + M_cap), "חסומה מלעיל", "חסומה מלרע"]
             },
 
-            // --- שבוע 3: משפטי גבולות מתקדמים ומבחנים ---
+            // --- SEQUENCES ---
             {
-                id: 14,
-                title: "מבחן המנה (ד'אלמבר) להתכנסות",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["תהי $a_n > 0$.", "אם", "$\\lim\\limits_{n \\to \\infty} \\frac{a_{n+1}}{a_n} = q < 1$", "אזי", "$\\lim\\limits_{n \\to \\infty} a_n = 0$."],
-                distractors: ["$q > 1$", "$\\lim\\limits_{n \\to \\infty} a_n = \\infty$", "$q = 1$"]
+                id: 9, category: 'sequences', title: "הגדרת גבול של סדרה",
+                intro: `נאמר שסדרה <span class="math-font m-var">a<sub>n</sub></span> מתכנסת לגבול <span class="math-font m-var">L</span> אם:`,
+                parts: [
+                    { id: 'p1', txt: "לכל" }, { id: 'p2', txt: ltr(epsilon + " > 0") },
+                    { id: 'p3', txt: "קיים" }, { id: 'p4', txt: N_cap + " טבעי" },
+                    { id: 'p5', txt: "כך שלכל" }, { id: 'p6', txt: ltr("n > " + N_cap) },
+                    { id: 'p7', txt: "מתקיים" }, { id: 'p8', txt: ltr(abs("a<sub>n</sub> - L") + " < " + epsilon) }
+                ],
+                valid: [['p1','p2','p3','p4','p5','p6','p7','p8']],
+                distractors: ["לכל " + N_cap, "קיים " + epsilon, ltr("n < " + N_cap), ltr(abs("a<sub>n</sub> - L") + " > " + epsilon)]
             },
             {
-                id: 15,
-                title: "מבחן השורש (קושי) להתבדרות",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["תהי $a_n > 0$.", "אם", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a_n} = q > 1$", "אזי", "$\\lim\\limits_{n \\to \\infty} a_n = \\infty$."],
-                distractors: ["$q < 1$", "$\\lim\\limits_{n \\to \\infty} a_n = 0$", "מתכנסת"]
+                id: 10, category: 'sequences', title: "סדרה חסומה",
+                intro: `סדרה <span class="math-font m-var">a<sub>n</sub></span> נקראת חסומה אם:`,
+                parts: [
+                    { id: 'p1', txt: "קיים" }, { id: 'p2', txt: ltr(M_cap + " > 0") },
+                    { id: 'p3', txt: "כך שלכל" }, { id: 'p4', txt: "n טבעי" },
+                    { id: 'p5', txt: "מתקיים" }, { id: 'p6', txt: ltr(abs("a<sub>n</sub>") + " &le; " + M_cap) }
+                ],
+                valid: [['p1','p2','p3','p4','p5','p6']],
+                distractors: ["לכל " + M_cap, "מתכנסת", ltr("a<sub>n</sub> < " + M_cap), "קיים n"]
             },
             {
-                id: 16,
-                title: "גבול ידוע: שורש n-י של n",
-                template: `{{0}}`,
-                answers: ["$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{n} = 1$."],
-                distractors: ["$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{n} = \\infty$", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{n} = 0$"]
+                id: 11, category: 'sequences', title: "משפט היחידות",
+                intro: `אם לסדרה יש גבול, אזי:`,
+                parts: [
+                    { id: 'p1', txt: "הגבול הוא" }, { id: 'p2', txt: "יחיד" }
+                ],
+                valid: [['p1','p2']],
+                distractors: ["יש שני גבולות", "היא חסומה", "היא מונוטונית", "הוא 0"]
             },
             {
-                id: 17,
-                title: "גבול ידוע: שורש n-י של קבוע",
-                template: `{{0}} {{1}} {{2}}`,
-                answers: ["לכל", "$a > 0$,", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a} = 1$."],
-                distractors: ["$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a} = a$", "$\\lim\\limits_{n \\to \\infty} \\sqrt[n]{a} = 0$", "קיים"]
-            },
-
-            // --- שבוע 4: מונוטוניות, תת-סדרות ---
-            {
-                id: 18,
-                title: "הגדרת סדרה מונוטונית עולה",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["סדרה $a_n$", "היא מונוטונית עולה", "אם", "לכל", "$n$", "$a_{n+1} \\ge a_n$."],
-                distractors: ["$a_{n+1} \\le a_n$", "יורדת", "מתכנסת"]
+                id: 12, category: 'sequences', title: "התכנסות גוררת חסימות",
+                intro: `משפט:`,
+                parts: [
+                    { id: 'p1', txt: "כל סדרה מתכנסת" }, { id: 'p2', txt: "היא" }, { id: 'p3', txt: "סדרה חסומה" }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: ["כל סדרה חסומה", "היא מתכנסת", "מונוטונית", "חיובית"]
             },
             {
-                id: 19,
-                title: "משפט ההתכנסות המונוטונית",
-                template: `{{0}} {{1}} {{2}} {{3}}`,
-                answers: ["סדרה מונוטונית", "וחסומה", "היא", "מתכנסת."],
-                distractors: ["מתבדרת", "סדרת קושי", "חיובית"]
+                id: 13, category: 'sequences', title: "שאיפה לאינסוף",
+                intro: `הסדרה <span class="math-font m-var">a<sub>n</sub></span> שואפת לאינסוף אם:`,
+                parts: [
+                    { id: 'p1', txt: "לכל" }, { id: 'p2', txt: ltr(M_cap + " > 0") },
+                    { id: 'p3', txt: "קיים" }, { id: 'p4', txt: N_cap },
+                    { id: 'p5', txt: "כך שלכל" }, { id: 'p6', txt: ltr("n > " + N_cap) },
+                    { id: 'p7', txt: ltr("a<sub>n</sub> > " + M_cap) }
+                ],
+                valid: [['p1','p2','p3','p4','p5','p6','p7']],
+                distractors: [ltr("a<sub>n</sub> < " + M_cap), "קיים " + M_cap, "מתכנסת", "חסומה"]
             },
             {
-                id: 20,
-                title: "הלמה של קנטור (קטעים משולבים)",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["לכל", "סדרת קטעים סגורים", "מוכלים $I_{n+1} \\subseteq I_n$", "שאורכם שואף לאפס,", "יש נקודה משותפת יחידה."],
-                distractors: ["קטעים פתוחים", "החיתוך ריק", "אינסוף נקודות", "קיים"]
+                id: 14, category: 'sequences', title: "סדרה אפסה",
+                intro: `סדרה נקראת אפסה אם:`,
+                parts: [
+                    { id: 'p1', txt: "הגבול שלה" }, { id: 'p2', txt: "הוא" }, { id: 'p3', txt: "0" }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: ["היא קבועה", "היא חסומה", "1", "היא ריקה"]
             },
             {
-                id: 21,
-                title: "משפט תת-סדרה של סדרה מתכנסת",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["אם", "$\\lim\\limits_{n \\to \\infty} a_n = L$", "אזי", "כל", "תת-סדרה שלה", "מתכנסת ל-$L$."],
-                distractors: ["מתבדרת", "מתכנסת ל-$L'$", "קיים"]
+                id: 15, category: 'sequences', title: "אריתמטיקה: סכום",
+                intro: `אם ${lim('n','&infin;','a<sub>n</sub>','A')} ו-${lim('n','&infin;','b<sub>n</sub>','B')}, אזי הגבול של הסכום הוא:`,
+                parts: [{ id: 'p1', txt: ltr("A + B") }],
+                valid: [['p1']],
+                distractors: [ltr("A * B"), "0", "אינסוף", "לא קיים"]
             },
             {
-                id: 22,
-                title: "למה לקראת בולצאנו-ויירשטראס",
-                template: `{{0}} {{1}} {{2}} {{3}}`,
-                answers: ["לכל", "סדרה", "קיימת", "תת-סדרה מונוטונית."],
-                distractors: ["חסומה", "מתכנסת", "יחידה", "אם"]
+                id: 16, category: 'sequences', title: "אריתמטיקה: מכפלה",
+                intro: `אם ${lim('n','&infin;','a<sub>n</sub>','A')} ו-${lim('n','&infin;','b<sub>n</sub>','B')}, אזי הגבול של המכפלה הוא:`,
+                parts: [{ id: 'p1', txt: ltr("A &middot; B") }],
+                valid: [['p1']],
+                distractors: [ltr("A + B"), ltr("A / B"), "1", ltr("A - B")]
             },
             {
-                id: 23,
-                title: "משפט בולצאנו-ויירשטראס",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["לכל", "סדרה", "חסומה", "קיימת", "תת-סדרה מתכנסת."],
-                distractors: ["מונוטונית", "מתבדרת", "לא חסומה", "אם"]
+                id: 17, category: 'sequences', title: "גבול הערך המוחלט",
+                intro: `אם ${lim('n','&infin;',abs('a<sub>n</sub>'),'0')}, אזי:`,
+                parts: [{ id: 'p1', txt: lim('n','&infin;','a<sub>n</sub>','0') }],
+                valid: [['p1']],
+                distractors: ["הגבול הוא 1", "לא קיים גבול", "הגבול הוא אינסוף", "מתבדרת"]
             },
             {
-                id: 24,
-                title: "הגדרת גבול חלקי",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}`,
-                answers: ["$L$ הוא גבול חלקי", "של $a_n$", "אם", "קיימת", "תת-סדרה $a_{n_k}$", "כך ש-", "$\\lim\\limits_{k \\to \\infty} a_{n_k} = L$."],
-                distractors: ["לכל", "תת-סדרה", "סופרמום", "יחיד"]
-            },
-
-            // --- שבוע 5: גבול עליון/תחתון וקושי ---
-            {
-                id: 25,
-                title: "הגדרת גבול עליון (Limsup)",
-                template: `{{0}} {{1}} {{2}} {{3}}`,
-                answers: ["הגבול העליון", "הוא", "הסופרמום", "של קבוצת הגבולות החלקיים."],
-                distractors: ["האינפימום", "המקסימום", "הממוצע"]
+                id: 18, category: 'sequences', title: "כלל הסנדוויץ'",
+                intro: `נתונות סדרות $a_n, b_n, c_n$. אם מתקיים $a_n \\le b_n \\le c_n$ וגם הסדרות הקיצוניות שואפות ל-L, אזי:`,
+                parts: [
+                    { id: 'p1', txt: "גם הסדרה האמצעית" }, { id: 'p2', txt: "b<sub>n</sub>" }, { id: 'p3', txt: "שואפת ל-L" }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: ["שואפת ל-0", "מתבדרת", "חסומה בלבד", "L+1"]
             },
             {
-                id: 26,
-                title: "משפט שוויון גבולות עליון ותחתון",
-                template: `{{0}} {{1}} {{2}} {{3}}`,
-                answers: ["סדרה מתכנסת (במובן הרחב)", "אם ורק אם", "הגבול העליון", "שווה לגבול התחתון."],
-                distractors: ["שונה", "גדול", "חסומה"]
+                id: 19, category: 'sequences', title: "מונוטונית עולה",
+                intro: `סדרה <span class="math-font m-var">a<sub>n</sub></span> היא מונוטונית עולה אם:`,
+                parts: [
+                    { id: 'p1', txt: "לכל n" }, { id: 'p2', txt: "מתקיים" }, { id: 'p3', txt: ltr("a<sub>n+1</sub> &ge; a<sub>n</sub>") }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: [ltr("a<sub>n+1</sub> &le; a<sub>n</sub>"), ltr("a<sub>n</sub> > 0"), "מתכנסת", "קיים n"]
             },
             {
-                id: 27,
-                title: "הגדרת סדרת קושי",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
-                answers: ["סדרה $a_n$ היא קושי", "אם", "לכל", "$\\varepsilon > 0$", "קיים", "$N$", "כך ש-", "לכל", "$n,m > N$", "מתקיים $|a_n - a_m| < \\varepsilon$."],
-                distractors: ["קיים", "$|a_n - L| < \\varepsilon$", "לכל $N$"]
+                id: 20, category: 'sequences', title: "התכנסות מונוטונית",
+                intro: `משפט ויירשטראס קובע ש:`,
+                parts: [
+                    { id: 'p1', txt: "כל סדרה" }, { id: 'p2', txt: "מונוטונית וחסומה" }, { id: 'p3', txt: "היא" }, { id: 'p4', txt: "סדרה מתכנסת" }
+                ],
+                // "Monotone and bounded" can be split? No, kept simple here.
+                valid: [['p1','p2','p3','p4']],
+                distractors: ["מתבדרת", "שואפת לאינסוף", "אפסה", "קבועה"]
             },
             {
-                id: 28,
-                title: "שלילת סדרת קושי (אינה קושי)",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}} {{8}} {{9}}`,
-                answers: ["סדרה אינה קושי", "אם", "קיים", "$\\varepsilon > 0$", "כך ש-", "לכל", "$N$", "קיימים", "$n,m > N$", "שעבורם $|a_n - a_m| \\ge \\varepsilon$."],
-                distractors: ["לכל", "קיים $N$", "קטן מ-"]
+                id: 21, category: 'sequences', title: "תת-סדרה",
+                intro: `אם בוחרים אינדקסים עולים ממש $n_1 < n_2 < ...$, הסדרה $a_{n_k}$ נקראת:`,
+                parts: [
+                    { id: 'p1', txt: "תת-סדרה" }, { id: 'p2', txt: "של" }, { id: 'p3', txt: "a<sub>n</sub>" }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: ["סדרת קושי", "סדרה חלקית", "גבול חלקי", "סדרה הופכית"]
             },
             {
-                id: 29,
-                title: "תנאי קושי להתכנסות",
-                template: `{{0}} {{1}} {{2}}`,
-                answers: ["סדרה ממשית מתכנסת", "אם ורק אם", "היא סדרת קושי."],
-                distractors: ["חסומה", "מונוטונית", "חיובית"]
+                id: 22, category: 'sequences', title: "גבול של תת-סדרה",
+                intro: `אם סדרה מתכנסת ל-L, אזי:`,
+                parts: [
+                    { id: 'p1', txt: "כל תת-סדרה שלה" }, { id: 'p2', txt: "מתכנסת" }, { id: 'p3', txt: "לאותו הגבול L" }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: ["קיימת תת-סדרה", "מתבדרת", "שואפת ל-0", "חסומה מלעיל"]
             },
             {
-                id: 30,
-                title: "משפט: סדרת קושי היא חסומה",
-                template: `{{0}} {{1}} {{2}} {{3}} {{4}}`,
-                answers: ["כל", "סדרת קושי", "של מספרים ממשיים", "היא בהכרח", "סדרה חסומה."],
-                distractors: ["מונוטונית", "מתבדרת", "לא חסומה", "חיובית"]
+                id: 23, category: 'sequences', title: "משפט בולצאנו-ויירשטראס",
+                intro: `לכל סדרה חסומה:`,
+                parts: [
+                    { id: 'p1', txt: "קיימת" }, { id: 'p2', txt: "תת-סדרה" }, { id: 'p3', txt: "מתכנסת" }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: ["יש גבול יחיד", "שהיא מונוטונית", "שואפת לאינסוף", "קבועה"]
+            },
+            {
+                id: 24, category: 'sequences', title: "סדרה הנדסית",
+                intro: `הסדרה $q^n$ מתכנסת ל-0 אם ורק אם:`,
+                parts: [{ id: 'p1', txt: ltr(abs("q") + " < 1") }],
+                valid: [['p1']],
+                distractors: [ltr("q > 1"), ltr("q = 1"), ltr("q < -1"), ltr("q = 0")]
+            },
+            {
+                id: 25, category: 'sequences', title: "סדרת קושי (הגדרה)",
+                intro: `סדרה נקראת סדרת קושי אם:`,
+                parts: [
+                    { id: 'p1', txt: "לכל" }, { id: 'p2', txt: ltr(epsilon + " > 0") },
+                    { id: 'p3', txt: "קיים" }, { id: 'p4', txt: N_cap },
+                    { id: 'p5', txt: "כך שלכל" }, { id: 'p6', txt: ltr("n, m > " + N_cap) },
+                    { id: 'p7', txt: ltr(abs("a<sub>n</sub> - a<sub>m</sub>") + " < " + epsilon) }
+                ],
+                valid: [['p1','p2','p3','p4','p5','p6','p7']],
+                distractors: ["לכל n", "קיים " + epsilon, abs("a<sub>n</sub> - L"), "m > n"]
+            },
+            {
+                id: 26, category: 'sequences', title: "קריטריון קושי להתכנסות",
+                intro: `סדרה ממשית מתכנסת:`,
+                parts: [
+                    { id: 'p1', txt: "אם ורק אם" }, { id: 'p2', txt: "היא" }, { id: 'p3', txt: "סדרת קושי" }
+                ],
+                valid: [['p1','p2','p3']],
+                distractors: ["היא חסומה", "היא מונוטונית", "היא חיובית", "אם קיים גבול"]
+            },
+            {
+                id: 27, category: 'sequences', title: "מבחן המנה (התכנסות)",
+                intro: `תהי $a_n$ סדרה חיובית. אם הגבול של $a_{n+1}/a_n$ הוא $q < 1$, אזי:`,
+                parts: [
+                    { id: 'p1', txt: "הסדרה מתכנסת" }, { id: 'p2', txt: "ל-0" }
+                ],
+                valid: [['p1','p2']],
+                distractors: ["מתכנסת ל-1", "מתכנסת ל-q", "שואפת לאינסוף", "מתבדרת"]
+            },
+            {
+                id: 28, category: 'sequences', title: "מבחן השורש (התבדרות)",
+                intro: `תהי $a_n$ סדרה חיובית. אם הגבול של השורש ה-n-י של $a_n$ הוא $q > 1$, אזי:`,
+                parts: [
+                    { id: 'p1', txt: "הסדרה" }, { id: 'p2', txt: "שואפת לאינסוף" }
+                ],
+                valid: [['p1','p2']],
+                distractors: ["מתכנסת ל-0", "מתכנסת ל-1", "חסומה", "מתכנסת ל-q"]
+            },
+            {
+                id: 29, category: 'sequences', title: "מכפלת אפסה בחסומה",
+                intro: `אם $a_n$ שואפת ל-0 ו-$b_n$ חסומה, אזי:`,
+                parts: [
+                    { id: 'p1', txt: "מכפלתן" }, { id: 'p2', txt: "שואפת ל-0" }
+                ],
+                valid: [['p1','p2']],
+                distractors: ["שואפת לאינסוף", "שואפת ל-1", "מתבדרת", "לא קיימת"]
+            },
+            {
+                id: 30, category: 'sequences', title: "הלמה של קנטור",
+                intro: `בסדרת קטעים סגורים ומקוננים שרוחבם שואף ל-0:`,
+                parts: [
+                    { id: 'p1', txt: "קיימת" }, { id: 'p2', txt: "נקודה יחידה" },
+                    { id: 'p3', txt: "המשותפת" }, { id: 'p4', txt: "לכל הקטעים" }
+                ],
+                valid: [['p1','p2','p3','p4']],
+                distractors: ["קבוצה ריקה", "אינסוף נקודות", "פתוחים", "לא חסומים"]
             }
         ];
 
-        // --- State Management ---
-        let currentLevelIndex = 0;
-        let placedItems = {}; 
-        let selectedItem = null;
+        // --- 3. State ---
+        let completed = new Set();
+        let currentIdx = 0;
+        let draggedEl = null;
 
-        // --- DOM Elements ---
-        const menuScreen = document.getElementById('menu-screen');
-        const gameBoard = document.getElementById('game-board');
-        const endScreen = document.getElementById('end-screen');
-        const levelsGrid = document.getElementById('levels-grid');
-        const sentenceContainer = document.getElementById('sentence-container');
-        const wordBank = document.getElementById('word-bank');
-        const feedbackEl = document.getElementById('feedback');
-        const levelIndicator = document.getElementById('level-indicator');
-        const nextBtn = document.getElementById('next-btn');
-        const gameStatus = document.getElementById('game-status');
-
-        // --- Initialization ---
-        function initGame() {
+        // --- 4. Core Functions ---
+        
+        function init() {
             renderMenu();
-            showMenu();
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
         }
 
         function renderMenu() {
-            levelsGrid.innerHTML = levels.map((level, index) => {
-                return `
-                <div onclick="startLevel(${index})" class="level-card bg-white p-6 rounded-xl border border-blue-100 shadow-sm cursor-pointer transition flex flex-col items-center text-center h-full hover:border-blue-300">
-                    <div class="text-3xl font-bold text-blue-100 mb-2">${index + 1}</div>
-                    <div class="text-lg font-semibold text-gray-800">${level.title}</div>
-                </div>
-                `;
-            }).join('');
+            const gridSets = document.getElementById('grid-sets');
+            const gridSeqs = document.getElementById('grid-sequences');
             
-            // Render Math in titles if any
-            if (window.MathJax) {
-                MathJax.typesetPromise([levelsGrid]);
-            }
+            gridSets.innerHTML = '';
+            gridSeqs.innerHTML = '';
+
+            levels.forEach((lvl, idx) => {
+                const isDone = completed.has(lvl.id);
+                const el = document.createElement('div');
+                el.className = `level-card bg-gray-800 border ${isDone ? 'border-green-500' : 'border-gray-700'} p-4 rounded-xl cursor-pointer relative overflow-hidden group`;
+                el.onclick = () => loadLevel(idx);
+                
+                const color = lvl.category === 'sets' ? 'text-purple-400' : 'text-teal-400';
+                const grad = isDone ? 'from-green-500 to-teal-500' : 'from-gray-700 to-gray-600 group-hover:from-cyan-500 group-hover:to-blue-500';
+
+                el.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="font-bold text-lg text-white group-hover:${color} transition w-5/6">${lvl.title}</h3>
+                        ${isDone ? '<span class="material-symbols-outlined text-green-500">check_circle</span>' : '<span class="material-symbols-outlined text-gray-600">play_circle</span>'}
+                    </div>
+                    <div class="text-xs text-gray-500 font-mono">#${lvl.id}</div>
+                    <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r ${grad}"></div>
+                `;
+
+                if (lvl.category === 'sets') gridSets.appendChild(el);
+                else gridSeqs.appendChild(el);
+            });
         }
 
         function showMenu() {
-            menuScreen.classList.remove('hidden');
-            gameBoard.classList.add('hidden');
-            endScreen.classList.add('hidden');
-            gameStatus.classList.add('hidden');
-            // Reset game state to be safe
-            selectedItem = null;
-            placedItems = {};
+            document.getElementById('game-view').classList.add('hidden');
+            document.getElementById('menu-view').classList.remove('hidden');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            renderMenu();
         }
 
-        function startLevel(index) {
-            currentLevelIndex = index;
-            menuScreen.classList.add('hidden');
-            gameBoard.classList.remove('hidden');
-            endScreen.classList.add('hidden');
-            gameStatus.classList.remove('hidden');
-            loadLevel(currentLevelIndex);
-        }
-
-        // --- Level Loading ---
-        function loadLevel(index) {
-            const level = levels[index];
-            levelIndicator.innerText = index + 1;
-            placedItems = {};
-            selectedItem = null;
-            feedbackEl.innerText = "";
-            feedbackEl.className = "h-8 text-center font-bold text-lg mb-2";
-            nextBtn.classList.add('hidden');
-
-            let htmlContent = level.template;
-            level.answers.forEach((ans, i) => {
-                const slotHtml = `<div class="drop-zone" data-index="${i}" ondragover="allowDrop(event)" ondrop="drop(event)" onclick="handleSlotClick(${i})"></div>`;
-                htmlContent = htmlContent.replace(`{{${i}}}`, slotHtml);
-            });
+        function loadLevel(idx) {
+            currentIdx = idx;
+            const lvl = levels[idx];
             
-            htmlContent = `<div class="w-full text-blue-600 font-bold text-lg mb-4 text-center border-b border-blue-100 pb-2">${level.title}</div>` + htmlContent;
-            sentenceContainer.innerHTML = htmlContent;
+            document.getElementById('menu-view').classList.add('hidden');
+            document.getElementById('game-view').classList.remove('hidden');
+            window.scrollTo({top: 0, behavior: 'smooth'});
 
-            // Prepare words
-            const bankItems = [];
-            level.answers.forEach(a => bankItems.push({text: a, type: 'correct'}));
-            level.distractors.forEach(d => bankItems.push({text: d, type: 'distractor'}));
+            document.getElementById('level-indicator').textContent = `שלב ${idx+1}/${levels.length}`;
+            document.getElementById('game-title').textContent = lvl.title;
+            document.getElementById('game-intro').innerHTML = lvl.intro;
+            
+            document.getElementById('success-msg').classList.remove('opacity-100', 'translate-y-0');
+            document.getElementById('success-msg').classList.add('opacity-0', 'translate-y-2');
+            document.getElementById('next-btn').classList.add('hidden');
+
+            setupBoard(lvl);
+        }
+
+        function setupBoard(lvl) {
+            const src = document.getElementById('source-zone');
+            const tgt = document.getElementById('target-zone');
+            const ph = document.getElementById('placeholder-text');
+
+            src.innerHTML = '';
+            Array.from(tgt.children).forEach(c => {
+                if (c.id !== 'placeholder-text') tgt.removeChild(c);
+            });
+            ph.style.display = 'flex';
+
+            let items = [];
+            lvl.parts.forEach((p, i) => items.push({ ...p, type: 'correct' }));
+            lvl.distractors.forEach((txt, i) => items.push({ id: `d-${i}`, txt, type: 'distractor' }));
             
             // Shuffle
-            shuffleArray(bankItems);
+            for (let i = items.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [items[i], items[j]] = [items[j], items[i]];
+            }
 
-            wordBank.innerHTML = "";
-            bankItems.forEach((item, idx) => {
+            items.forEach(item => {
                 const div = document.createElement('div');
-                div.className = "draggable-item bg-white border border-blue-300 rounded px-3 py-2 font-medium text-blue-800 hover:bg-blue-50 select-none cursor-pointer text-sm md:text-base";
+                div.className = 'draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-4 py-2 rounded-md shadow-md text-lg';
+                div.innerHTML = item.txt;
                 div.draggable = true;
-                div.innerHTML = item.text;
-                div.setAttribute('data-value', item.text); 
-                
-                div.addEventListener('dragstart', (e) => {
-                    e.dataTransfer.setData("text", item.text); 
-                    if(selectedItem) { selectedItem.classList.remove('selected'); selectedItem = null; }
-                });
-                
-                div.addEventListener('click', (e) => {
-                    if (elementIsSlot(div)) return; 
-                    document.querySelectorAll('.draggable-item').forEach(el => el.classList.remove('selected'));
-                    div.classList.add('selected');
-                    selectedItem = div;
-                });
-                
-                wordBank.appendChild(div);
+                div.id = item.id; 
+                div.dataset.type = item.type;
+
+                div.addEventListener('dragstart', dragStart);
+                div.addEventListener('dragend', dragEnd);
+                div.addEventListener('click', clickMove);
+
+                src.appendChild(div);
             });
 
-            if (window.MathJax) {
-                MathJax.typesetPromise([sentenceContainer, wordBank]);
-            }
+            document.getElementById('feedback-area').style.opacity = '0';
+            tgt.classList.remove('shake', 'correct-glow');
         }
 
-        function elementIsSlot(el) {
-            return el.closest('.drop-zone') !== null;
-        }
-
-        // --- Interactions (Drag & Drop + Click) ---
-
-        let draggedContent = null;
-        let draggedElement = null;
-
-        function drag(ev) {
-            const rawValue = ev.target.getAttribute('data-value');
-            ev.dataTransfer.setData("text/plain", rawValue);
-            if(selectedItem) { selectedItem.classList.remove('selected'); selectedItem = null; }
-        }
-
-        function allowDrop(ev) {
-            ev.preventDefault();
-            ev.target.classList.add('hovered');
-        }
-
-        function drop(ev) {
-            ev.preventDefault();
-            const slot = ev.target.closest('.drop-zone');
-            slot.classList.remove('hovered');
-            if (!slot) return;
-            const rawValue = ev.dataTransfer.getData("text/plain");
-            placeWordInSlot(slot, rawValue);
-        }
-
-        function handleSlotClick(slotIndex) {
-            const slot = document.querySelector(`.drop-zone[data-index="${slotIndex}"]`);
-            if (selectedItem) {
-                const rawValue = selectedItem.getAttribute('data-value');
-                placeWordInSlot(slot, rawValue);
-                selectedItem.classList.remove('selected');
-                selectedItem = null;
-            } else if (placedItems[slotIndex]) {
-                clearSlot(slot, slotIndex);
-            }
-        }
-
-        function placeWordInSlot(slot, rawContent) {
-            const index = slot.getAttribute('data-index');
-            slot.innerText = rawContent; 
-            slot.setAttribute('data-value', rawContent);
-            slot.style.borderStyle = "solid";
-            slot.style.backgroundColor = "#eff6ff";
-            placedItems[index] = rawContent;
-            if (window.MathJax) {
-                slot.innerHTML = rawContent;
-                MathJax.typesetPromise([slot]);
-            }
-        }
-
-        function clearSlot(slot, index) {
-            slot.innerHTML = "";
-            slot.removeAttribute('data-value');
-            slot.style.borderStyle = "dashed";
-            slot.style.backgroundColor = "#eef2ff";
-            delete placedItems[index];
-            slot.classList.remove('correct', 'wrong');
-        }
-
-        // --- Game Logic ---
-
+        // --- 5. Game Logic ---
         function checkAnswer() {
-            const level = levels[currentLevelIndex];
-            let allCorrect = true;
-            let filledCount = 0;
+            const lvl = levels[currentIdx];
+            const tgt = document.getElementById('target-zone');
+            const items = Array.from(tgt.children).filter(el => el.id !== 'placeholder-text');
 
-            level.answers.forEach((ans, i) => {
-                const slot = document.querySelector(`.drop-zone[data-index="${i}"]`);
-                const userValue = placedItems[i]; 
-
-                if (!userValue) {
-                    allCorrect = false;
-                    slot.classList.add('wrong');
-                    return;
-                }
-                filledCount++;
-                const isMatch = checkMatch(userValue, ans);
-
-                if (isMatch) {
-                    slot.classList.add('correct');
-                    slot.classList.remove('wrong');
-                } else {
-                    slot.classList.add('wrong');
-                    slot.classList.remove('correct');
-                    allCorrect = false;
-                }
-            });
-
-            if (filledCount < level.answers.length) {
-                feedbackEl.innerText = "נא למלא את כל החסר";
-                feedbackEl.className = "text-yellow-600 font-bold mb-4";
+            if (items.length === 0) {
+                feedback('המשפט ריק, נסו לגרור פריטים.', 'text-gray-400');
                 return;
             }
 
-            if (allCorrect) {
-                feedbackEl.innerText = "כל הכבוד! תשובה נכונה.";
-                feedbackEl.className = "text-green-600 font-bold mb-4 text-xl";
-                nextBtn.classList.remove('hidden');
-                triggerConfetti();
+            const currentIds = items.map(el => el.id);
+            
+            // Check if user sequence matches ANY valid sequence
+            let isCorrect = false;
+            
+            for (let validSeq of lvl.valid) {
+                if (JSON.stringify(currentIds) === JSON.stringify(validSeq)) {
+                    isCorrect = true;
+                    break;
+                }
+            }
+
+            if (isCorrect) {
+                tgt.classList.add('correct-glow');
+                document.getElementById('success-msg').classList.remove('opacity-0', 'translate-y-2');
+                document.getElementById('success-msg').classList.add('opacity-100', 'translate-y-0');
+                completed.add(lvl.id);
+                document.getElementById('next-btn').classList.remove('hidden');
+                startConfetti();
             } else {
-                feedbackEl.innerText = "יש טעות, נסו שוב.";
-                feedbackEl.className = "text-red-600 font-bold mb-4";
-                setTimeout(() => {
-                    document.querySelectorAll('.wrong').forEach(el => el.classList.remove('wrong')); 
-                }, 500);
+                tgt.classList.remove('shake');
+                void tgt.offsetWidth;
+                tgt.classList.add('shake');
+                
+                // Highlight distractors
+                items.forEach(el => {
+                    if (el.dataset.type === 'distractor') {
+                        el.classList.add('border-red-500', 'bg-red-500/20');
+                        setTimeout(() => el.classList.remove('border-red-500', 'bg-red-500/20'), 1500);
+                    }
+                });
+
+                if (items.some(x => x.dataset.type === 'distractor')) feedback('שימו לב: ישנם מסיחים.', 'text-red-400');
+                else if (items.length !== lvl.parts.length) feedback('אורך המשפט לא מתאים.', 'text-red-400');
+                else feedback('הסדר לא נכון.', 'text-red-400');
             }
         }
 
-        function checkMatch(userValue, correctValue) {
-            return userValue.trim() === correctValue.trim();
-        }
-        
-        // --- Navigation ---
-
-        function nextLevel() {
-            if (currentLevelIndex < levels.length - 1) {
-                startLevel(currentLevelIndex + 1);
-            } else {
-                showEndScreen();
-            }
+        function feedback(msg, color) {
+            const f = document.getElementById('feedback-area');
+            f.innerHTML = `<span class="${color} flex items-center gap-2"><span class="material-symbols-outlined text-lg">info</span>${msg}</span>`;
+            f.classList.remove('opacity-0');
+            setTimeout(() => f.classList.add('opacity-0'), 3000);
         }
 
         function resetLevel() {
-            loadLevel(currentLevelIndex);
+            loadLevel(currentIdx);
         }
 
-        function showEndScreen() {
-            gameBoard.classList.add('hidden');
-            endScreen.classList.remove('hidden');
-            endScreen.classList.add('fade-in');
-            triggerConfetti();
+        function nextLevel() {
+            if (currentIdx < levels.length - 1) loadLevel(currentIdx + 1);
+            else showMenu();
         }
 
-        function restartGame() {
-            initGame();
+        function downloadPage() {
+            const htmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: "text/html" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "math_master_calculus.html";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
+        // --- 6. Drag & Drop ---
+        let dragged = null;
+
+        function dragStart(e) {
+            dragged = this;
+            setTimeout(() => this.classList.add('dragging'), 0);
+        }
+        function dragEnd(e) {
+            this.classList.remove('dragging');
+            checkPlaceholder();
+            dragged = null;
+        }
+        function allowDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drag-over');
+        }
+        function drop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drag-over');
+            if (dragged && !e.currentTarget.contains(dragged)) {
+                e.currentTarget.appendChild(dragged);
+                checkPlaceholder();
+            }
+        }
+        function clickMove(e) {
+            const item = e.currentTarget;
+            const src = document.getElementById('source-zone');
+            const tgt = document.getElementById('target-zone');
+            if (src.contains(item)) tgt.appendChild(item);
+            else src.appendChild(item);
+            checkPlaceholder();
+        }
+        function checkPlaceholder() {
+            const tgt = document.getElementById('target-zone');
+            const ph = document.getElementById('placeholder-text');
+            const hasItems = Array.from(tgt.children).some(el => el.id !== 'placeholder-text');
+            ph.style.display = hasItems ? 'none' : 'flex';
+        }
+
+        // --- 7. Confetti ---
+        let confetti = false;
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let parts = [];
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        
+        class P {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = canvas.height + Math.random() * 100;
+                this.vx = (Math.random() - 0.5) * 4; this.vy = -(Math.random() * 10 + 10);
+                this.g = 0.3; this.c = `hsl(${Math.random()*360}, 70%, 50%)`;
+                this.s = Math.random() * 8 + 4; this.r = Math.random() * 360;
+                this.rs = (Math.random() - 0.5) * 10;
+            }
+            update() { this.x += this.vx; this.y += this.vy; this.vy += this.g; this.r += this.rs; }
+            draw() { 
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.r * Math.PI / 180); 
+                ctx.fillStyle = this.c; ctx.fillRect(-this.s/2, -this.s/2, this.s, this.s); ctx.restore(); 
             }
         }
 
-        function triggerConfetti() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-            var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                var particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
-            }, 250);
+        function loop() {
+            if (!confetti && parts.length === 0) { ctx.clearRect(0,0,canvas.width,canvas.height); return; }
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            for (let i = parts.length-1; i>=0; i--) {
+                parts[i].update(); parts[i].draw();
+                if (parts[i].y > canvas.height + 20) parts.splice(i, 1);
+            }
+            if (confetti || parts.length > 0) requestAnimationFrame(loop);
         }
 
-        // Start
-        window.onload = initGame;
+        function startConfetti() {
+            confetti = true;
+            for (let i=0; i<150; i++) parts.push(new P());
+            loop();
+            setTimeout(() => confetti = false, 3000);
+        }
+
+        // --- Init ---
+        init();
 
     </script>
-</body>
-</html>
+
+</body></html>
