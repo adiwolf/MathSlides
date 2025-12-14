@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק הגדרות ומשפטים - אלגברה 2מ'</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <!-- MathJax for rendering LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Confetti for winning -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700&display=swap');
+        
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #111827; /* Gray-900 (Dark Background) */
+            color: #f3f4f6; /* Gray-100 (Light Text) */
+            user-select: none;
+        }
+
+        /* --- Scrollbar Styling (Dark Theme) --- */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1f2937; /* Gray-800 */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4b5563; /* Gray-600 */
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6b7280; /* Gray-500 */
+        }
+
+        /* --- Game Styles --- */
+        .drop-zone {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            height: auto;
+            min-height: 45px;
+            border-bottom: 2px dashed #60a5fa; /* Blue-400 */
+            margin: 4px;
+            vertical-align: middle;
+            background-color: #374151; /* Gray-700 */
+            border-radius: 6px;
+            transition: all 0.2s;
+            text-align: center;
+            padding: 4px 10px;
+            cursor: pointer;
+            line-height: 1.5;
+            font-size: 1rem;
+            color: #e5e7eb; /* Gray-200 */
+        }
+
+        .drop-zone:empty::before {
+            content: "___";
+            color: #6b7280; /* Gray-500 */
+        }
+
+        .drop-zone.hovered {
+            background-color: #4b5563; /* Gray-600 */
+            border-color: #93c5fd; /* Blue-300 */
+            transform: scale(1.05);
+        }
+
+        .drop-zone.correct {
+            border-bottom: 2px solid #4ade80; /* Green-400 */
+            background-color: #064e3b; /* Green-900ish */
+            color: #86efac; /* Green-300 */
+            font-weight: bold;
+        }
+
+        .drop-zone.wrong {
+            border-bottom: 2px solid #f87171; /* Red-400 */
+            background-color: #7f1d1d; /* Red-900 */
+            animation: shake 0.5s;
+        }
+
+        .draggable-item {
+            cursor: grab;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            background-color: #1f2937; /* Gray-800 */
+            border: 1px solid #374151; /* Gray-700 */
+            color: #e5e7eb; /* Gray-200 */
+        }
+        
+        .draggable-item:hover {
+            background-color: #374151; /* Gray-700 */
+            border-color: #4b5563; /* Gray-600 */
+        }
+
+        .draggable-item:active {
+            cursor: grabbing;
+        }
+
+        .draggable-item.selected {
+            background-color: #1e3a8a; /* Blue-900 */
+            border-color: #60a5fa; /* Blue-400 */
+            transform: scale(1.05);
+            font-weight: bold;
+            color: #ffffff;
+        }
+
+        /* MathJax overrides for dark mode */
+        mjx-container {
+            font-size: 110% !important;
+            color: inherit !important;
+        }
+        /* Ensure MathJax SVG fills match text color */
+        mjx-container svg path {
+            fill: currentColor !important;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Menu Card Hover */
+        .level-card {
+            background-color: #1f2937; /* Gray-800 */
+            border: 1px solid #374151; /* Gray-700 */
+            color: #f3f4f6;
+        }
+
+        .level-card:hover {
+            transform: translateY(-2px);
+            background-color: #374151; /* Gray-700 */
+            border-color: #60a5fa; /* Blue-400 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Completed Level Style */
+        .level-card.completed {
+            border-color: #10b981; /* Emerald-500 */
+            background-color: #064e3b; /* Emerald-900 (very dark green) */
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background-color: #2563eb; /* Blue-600 */
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8; /* Blue-700 */
+        }
+        
+        .btn-secondary {
+            border: 1px solid #4b5563; /* Gray-600 */
+            color: #d1d5db; /* Gray-300 */
+        }
+        .btn-secondary:hover {
+            background-color: #374151; /* Gray-700 */
+            color: white;
+        }
+
+        /* Special CSS for True/False Table Layout */
+        .tf-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #374151;
+        }
+        .tf-row:last-child {
+            border-bottom: none;
+        }
+        .tf-text {
+            flex-grow: 1;
+            text-align: right;
+            font-size: 1.1rem;
+        }
+
+    </style>
+</head>
+<body class="flex flex-col h-screen overflow-hidden text-gray-100">
+
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg p-3 md:p-4 flex justify-between items-center z-10 shrink-0 border-b border-gray-700">
+        <div class="flex items-center gap-4">
+            <button onclick="showMenu()" class="text-blue-400 hover:text-blue-300 transition font-semibold flex items-center gap-1 bg-gray-700 px-3 py-1 rounded-full border border-gray-600 text-sm md:text-base hover:bg-gray-600">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 md:w-5 md:h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 7.125h19.5M2.25 12h19.5M2.25 16.875h19.5" />
+                </svg>
+                תפריט ראשי
+            </button>
+            <div>
+                <h1 class="text-lg md:text-xl font-bold text-white hidden md:block">משחק הגדרות ומשפטים - אלגברה 2מ'</h1>
+                <p class="text-xs md:text-sm text-gray-400 hidden md:block">מכפלות פנימיות, אופרטורים ומטריצות</p>
+            </div>
+        </div>
+        <div id="game-status" class="flex items-center gap-4 hidden">
+            <div class="text-base md:text-lg font-semibold text-blue-400 bg-gray-800 px-4 py-1 rounded-lg border border-gray-700">
+                שלב <span id="level-indicator">1</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col items-center justify-center p-2 md:p-4 relative w-full max-w-6xl mx-auto overflow-hidden">
+        
+        <!-- MENU SCREEN -->
+        <div id="menu-screen" class="w-full h-full overflow-y-auto pr-2 fade-in">
+            <div class="flex justify-between items-end mb-6 mt-4 px-2">
+                <div class="text-center w-full">
+                    <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">בחרו נושא לתרגול</h2>
+                    <p class="text-gray-400">32 כרטיסיות בנושאי נורמות, אורתוגונליות, אופרטורים ומטריצות.</p>
+                </div>
+                <button onclick="clearProgress()" class="text-xs text-red-400 hover:text-red-300 underline whitespace-nowrap absolute left-4 top-4">
+                    אפס התקדמות
+                </button>
+            </div>
+            
+            <div id="levels-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-8">
+                <!-- Grid items injected via JS -->
+            </div>
+        </div>
+
+        <!-- GAME BOARD SCREEN -->
+        <div id="game-board" class="hidden bg-gray-800 rounded-xl shadow-2xl p-4 md:p-8 w-full h-full flex flex-col fade-in relative overflow-y-auto max-h-full border border-gray-700">
+            
+            <!-- Instructions -->
+            <div class="mb-4 text-center text-gray-400 font-medium text-sm md:text-base shrink-0">
+                גררו את המילים למקום המתאים להשלמת ההגדרה או המשפט.
+            </div>
+
+            <!-- The Theorem/Definition Text Area -->
+            <div class="flex-grow flex items-center justify-center py-4 w-full">
+                <div class="text-lg md:text-xl leading-relaxed text-gray-200 text-center flex flex-wrap justify-center gap-y-4 gap-x-2 w-full max-w-4xl" id="sentence-container">
+                    <!-- Content injected via JS -->
+                </div>
+            </div>
+
+            <!-- Feedback Message -->
+            <div id="feedback" class="h-8 text-center font-bold text-lg mb-2 shrink-0"></div>
+
+            <!-- Word Bank -->
+            <div class="bg-gray-900 p-4 rounded-lg border border-gray-700 shrink-0 shadow-inner">
+                <h3 class="text-xs font-semibold text-gray-500 mb-2">מחסן מילים:</h3>
+                <div id="word-bank" class="flex flex-wrap gap-2 justify-center min-h-[60px]">
+                    <!-- Draggables injected via JS -->
+                </div>
+            </div>
+
+            <!-- Controls -->
+            <div class="mt-4 flex justify-center gap-4 shrink-0 pb-2">
+                <button onclick="resetLevel()" class="px-5 py-2 rounded-full btn-secondary transition text-sm">
+                    נקה הכל
+                </button>
+                <button onclick="checkAnswer()" class="px-8 py-2 rounded-full btn-primary font-bold shadow-md transition transform hover:scale-105">
+                    בדיקה
+                </button>
+                <button id="next-btn" onclick="nextLevel()" class="hidden px-8 py-2 rounded-full bg-green-600 text-white font-bold hover:bg-green-500 shadow-md transition animate-bounce">
+                    לשלב הבא &larr;
+                </button>
+            </div>
+        </div>
+
+        <!-- Completion Modal (End of all levels) -->
+        <div id="end-screen" class="hidden absolute inset-0 bg-gray-900 z-50 flex flex-col items-center justify-center text-center p-8 bg-opacity-95">
+            <h2 class="text-4xl font-bold text-blue-400 mb-4">סיימת את כל השלבים!</h2>
+            <p class="text-xl text-gray-300 mb-8">כל הכבוד! צוות הקורס ישמח למשוב על המשחק למייל adiw@technion.ac.il</p>
+            <button onclick="showMenu()" class="px-8 py-3 rounded-full bg-blue-600 text-white text-lg font-bold hover:bg-blue-500 shadow-lg border border-blue-400">
+                חזרה לתפריט
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 p-2 text-center text-gray-500 text-xs shrink-0 border-t border-gray-800">
+        נוצר עבור קורס אלגברה 2מ'/במ | טכניון | נוצר ע״י AI ולכן עלול להכיל טעויות 
+    </footer>
+
+    <script>
+        // --- Game Data (32 Levels) ---
+        const levels = [
+            // --- מכפלה פנימית ונורמה ---
+            {
+                id: 1,
+                title: "הגדרת מכפלה פנימית - אקסיומה 3 (ליניאריות)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}}.`,
+                answers: ["לכל", "$u,v,w \\in V$", "ולכל סקלר $\\alpha$", "מתקיים", "$\\langle \\alpha u + v, w \\rangle$", "$= \\alpha \\langle u, w \\rangle + \\langle v, w \\rangle$"],
+                distractors: ["$= \\alpha \\langle u, w \\rangle + \\alpha \\langle v, w \\rangle$", "במקדם השני", "הרמיטיות"]
+            },
+            {
+                id: 2,
+                title: "הגדרת מכפלה פנימית - הרמיטיות",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["לכל", "$u,v \\in V$", "מתקיים", "$\\langle u, v \\rangle = \\overline{\\langle v, u \\rangle}$"],
+                distractors: ["$\\langle u, v \\rangle = \\langle v, u \\rangle$", "$-\\langle v, u \\rangle$", "$\\langle u, u \\rangle \\ge 0$"]
+            },
+            {
+                id: 101,
+                title: "הגדרת מכפלה פנימית - אי-שליליות והתאפסות",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}} {{5}} {{6}} {{7}}.`,
+                answers: ["לכל", "$v \\in V$", "מתקיים", "$\\langle v, v \\rangle \\ge 0$", "וגם", "$\\langle v, v \\rangle = 0$", "אם ורק אם", "$v = 0_V$"],
+                distractors: ["$\\langle v, v \\rangle > 0$", "$v \\ne 0$", "$\\langle u, v \\rangle$"]
+            },
+            {
+                id: 3,
+                title: "הגדרת הנורמה המושרה ממכפלה פנימית",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["הנורמה", "של וקטור $v$", "מוגדרת על ידי", "$||v|| = \\sqrt{\\langle v, v \\rangle}$"],
+                distractors: ["$||v|| = \\langle v, v \\rangle$", "$||v||^2$", "$||v|| = |v|$"]
+            },
+            {
+                id: 4,
+                title: "אי-שוויון קושי-שווארץ",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["לכל", "$u,v \\in V$", "מתקיים", "$|\\langle u, v \\rangle| \\le ||u|| \\cdot ||v||$"],
+                distractors: ["$\\ge$", "$|\\langle u, v \\rangle|^2$", "$||u+v||$"]
+            },
+            {
+                id: 5,
+                title: "אי-שוויון המשולש",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["לכל", "$u,v \\in V$", "מתקיים", "$||u+v|| \\le ||u|| + ||v||$"],
+                distractors: ["$||u-v||$", "$\\ge$", "$= ||u|| + ||v||$"]
+            },
+            {
+                id: 6,
+                title: "ייצוג מטריציוני של מכפלה פנימית",
+                template: `{{0}} {{1}} {{2}} {{3}}, {{4}} {{5}} {{6}}.`,
+                answers: ["מטריצה $A$ מייצגת מ\"פ", "אם ורק אם", "היא מוגדרת חיובית", "כלומר $A$ הרמיטית", "וגם", "$x^t A \\overline{x} > 0$", "לכל $x \\ne 0$"],
+                distractors: ["$x^t A x < 0$", "סימטרית", "לכל $x$"]
+            },
+            
+            // --- אורתוגונליות ---
+            {
+                id: 7,
+                title: "הגדרת וקטורים אורתוגונליים",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["שני וקטורים", "$u,v$", "נקראים אורתוגונליים", "אם $\\langle u, v \\rangle = 0$"],
+                distractors: ["$||u|| = ||v||$", "ליניארית בלתי תלויים", "$u \\cdot v = 1$"]
+            },
+            {
+                id: 8,
+                title: "משפט פיתגורס המוכלל",
+                template: `{{0}} {{1}}, {{2}} {{3}} {{4}}.`,
+                answers: ["אם", "$u,v$ אורתוגונליים", "אזי", "$||u+v||^2$", "$= ||u||^2 + ||v||^2$"],
+                distractors: ["$||u|| + ||v||$", "$||u-v||^2$", "לכל זוג וקטורים"]
+            },
+            {
+                id: 9,
+                title: "קבוצה אורתוגונלית ואי-תלות",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["קבוצה אורתוגונלית", "של וקטורים", "שונים מאפס", "היא בלתי תלויה ליניארית"],
+                distractors: ["תלויה ליניארית", "פורשת את המרחב", "אורתונורמלית"]
+            },
+            {
+                id: 10,
+                title: "מקדם פורייה",
+                template: `{{0}} {{1}}. {{2}} {{3}}.`,
+                answers: ["יהי $B=\\{e_1,...,e_n\\}$", "בסיס אורתונורמלי", "המקדם ה-$i$ של $v$", "הוא $\\langle v, e_i \\rangle$"],
+                distractors: ["$\\langle e_i, v \\rangle$", "$||v||$", "$\\frac{\\langle v, e_i \\rangle}{||e_i||}$"]
+            },
+            {
+                id: 11,
+                title: "זהות פרסבל",
+                template: `{{0}} {{1}}, {{2}}, {{3}}.`,
+                answers: ["אם $B$ בסיס א\"נ", "אזי לכל $v$", "$||v||^2$", "$= \\sum_{i=1}^n |\\langle v, e_i \\rangle|^2$"],
+                distractors: ["$\\le$", "$\\sum \\langle v, e_i \\rangle$", "בסיס כלשהו"]
+            },
+            {
+                id: 12,
+                title: "תהליך גרם-שמידט",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["התהליך הופך", "בסיס כלשהו", "לבסיס", "אורתוגונלי (או א\"נ)"],
+                distractors: ["לכסין", "דואלי", "משולשי"]
+            },
+
+            // --- היטלים ומרחבים ---
+            {
+                id: 13,
+                title: "המשלים האורתוגונלי",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["המשלים האורתוגונלי", "$W^\\perp$", "הוא אוסף כל הוקטורים ב-$V$", "הניצבים", "לכל וקטור ב-$W$"],
+                distractors: ["השווים", "המקבילים", "הפורשים את $W$"]
+            },
+            {
+                id: 14,
+                title: "סכום ישר עם המשלים",
+                template: `{{0}} {{1}} {{2}}, {{3}}.`,
+                answers: ["אם $W$ תת-מרחב", "של ממ\"פ $V$", "אז", "$V = W \\oplus W^\\perp$"],
+                distractors: ["$V = W + W^\\perp$", "$W = (W^\\perp)^\\perp$", "איחוד"]
+            },
+            {
+                id: 15,
+                title: "היטל אורתוגונלי (קרוב ביותר)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["ההיטל $P_W(v)$", "הוא הוקטור", "בתוך $W$", "שהמרחק שלו מ-$v$", "הוא מינימלי"],
+                distractors: ["מקסימלי", "שווה ל-0", "בתוך $W^\\perp$"]
+            },
+            {
+                id: 16,
+                title: "נוסחת ההיטל",
+                template: `{{0}} {{1}}, {{2}} {{3}}.`,
+                answers: ["אם $\\{w_1,...,w_k\\}$", "בסיס א\"נ של $W$", "אז", "$P_W(v) = \\sum \\langle v, w_i \\rangle w_i$"],
+                distractors: ["$\\sum \\langle w_i, v \\rangle v$", "בסיס כלשהו", "חלקי הנורמה בריבוע"]
+            },
+
+            // --- אופרטורים ופונקציונלים ---
+            {
+                id: 17,
+                title: "משפט ההצגה של ריס",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["לכל פונקציונל ליניארי", "$f: V \\to \\mathbb{F}$", "קיים וקטור יחיד $z$", "כך ש-", "$f(v) = \\langle v, z \\rangle$"],
+                distractors: ["$f(v) = \\langle z, v \\rangle$", "אופרטור", "$f(z)$"]
+            },
+            {
+                id: 18,
+                title: "הגדרת האופרטור הצמוד",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["האופרטור הצמוד $T^*$", "הוא היחיד המקיים", "$\\langle Tv, u \\rangle$", "$= \\langle v, T^* u \\rangle$", "לכל $u,v$"],
+                distractors: ["$= \\langle T^* v, u \\rangle$", "$\\langle u, Tv \\rangle$", "ההופכי"]
+            },
+            {
+                id: 19,
+                title: "מטריצה מייצגת של הצמוד",
+                template: `{{0}} {{1}}, {{2}} {{3}}.`,
+                answers: ["ביחס לבסיס", "אורתונורמלי", "מתקיים", "$[T^*]_B = ([T]_B)^*$"],
+                distractors: ["$([T]_B)^t$", "$([T]_B)^{-1}$", "בסיס כלשהו"]
+            },
+            // REMOVED id: 20 ("תכונות הצמוד")
+            // REMOVED id: 21 ("תכונות הצמוד" was originally 20 in 0-indexed or previous versions, specifically removed per request)
+
+            // --- סוגי אופרטורים ---
+            {
+                id: 21,
+                title: "אופרטור צמוד לעצמו (הרמיטי)",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["אופרטור $T$", "נקרא צמוד לעצמו", "אם", "$T = T^*$"],
+                distractors: ["$T T^* = I$", "$T = -T^*$", "אוניטרי"]
+            },
+            {
+                id: 22,
+                title: "אופרטור אוניטרי",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["אופרטור $U$", "נקרא אוניטרי", "אם", "$U^* U = U U^* = I$"],
+                distractors: ["$U = U^*$", "נורמלי", "$U^2 = I$"]
+            },
+            {
+                id: 23,
+                title: "אופרטור נורמלי",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["אופרטור $N$", "נקרא נורמלי", "אם", "$N N^* = N^* N$"],
+                distractors: ["$N = N^*$", "הפיך", "משולשי"]
+            },
+            {
+                id: 24,
+                title: "אוניטריות ושמירת נורמה",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["אופרטור הוא אוניטרי", "אם ורק אם", "הוא שומר נורמה:", "$||Uv|| = ||v||$"],
+                distractors: ["$\\langle Uv, Uu \\rangle = 0$", "שומר זווית", "דטרמיננטה 1"]
+            },
+            {
+                id: 25,
+                title: "ערכים עצמיים של הרמיטי",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["הערכים העצמיים", "של אופרטור", "צמוד לעצמו", "הם תמיד ממשיים"],
+                distractors: ["מרוכבים", "חיוביים", "ערכם המוחלט 1"]
+            },
+            {
+                id: 26,
+                title: "ערכים עצמיים של אוניטרי",
+                template: `{{0}} {{1}} {{2}} {{3}}.`,
+                answers: ["הערכים העצמיים", "של אופרטור", "אוניטרי", "נמצאים על מעגל היחידה"],
+                distractors: ["ממשיים", "חיוביים", "אפס"]
+            },
+
+            // --- משפטים מרכזיים (ספקטרליים) ---
+            {
+                id: 27,
+                title: "המשפט המרכזי (מורכב)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["מעל $\\mathbb{C}$", "$T$ נורמלי", "אם ורק אם", "קיים בסיס א\"נ", "של וקטורים עצמיים"],
+                distractors: ["הרמיטי", "לכסין סתם", "מעל $\\mathbb{R}$"]
+            },
+            {
+                id: 28,
+                title: "המשפט המרכזי (ממשי)",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["מעל $\\mathbb{R}$", "$T$ צמוד לעצמו", "אם ורק אם", "קיים בסיס א\"נ", "של וקטורים עצמיים"],
+                distractors: ["נורמלי", "אורתוגונלי", "סימטרי אנטי"]
+            },
+            {
+                id: 29,
+                title: "אורתוגונליות מרחבים עצמיים",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["באופרטור נורמלי", "וקטורים עצמיים", "השייכים לערכים עצמיים", "שונים", "הם אורתוגונליים"],
+                distractors: ["בת\"ל", "זהים", "כלשהם"]
+            },
+            
+            // --- שלבים חדשים (סדר הוחלף) ---
+            
+            {
+                id: 30, // Was 32
+                title: "אופרטור אוניטרי ובסיס א\"נ",
+                template: `{{0}} {{1}} {{2}} {{3}} {{4}}.`,
+                answers: ["אופרטור $U$", "הוא אוניטרי", "אם ורק אם", "הוא מעביר בסיס א\"נ", "לבסיס א\"נ"],
+                distractors: ["לבסיס כלשהו", "הוא הפיך", "נורמלי"]
+            },
+
+            {
+                id: 31, // Was 31 (True/False Operators)
+                title: "נכון או לא נכון? אופרטורים",
+                template: `
+                    <div class="flex flex-col gap-4 text-right items-start w-full" style="direction: rtl;">
+                        <div class="tf-row">
+                            {{0}}
+                            <span class="tf-text text-gray-200">אם $T$ צמוד לעצמו $\\Leftarrow$ הוא נורמלי.</span>
+                        </div>
+                        <div class="tf-row">
+                            {{1}}
+                            <span class="tf-text text-gray-200">אם $T$ נורמלי $\\Leftarrow$ הוא צמוד לעצמו.</span>
+                        </div>
+                        <div class="tf-row">
+                            {{2}}
+                            <span class="tf-text text-gray-200">הטלה א"ג $P$ היא אופרטור אורתוגונלי.</span>
+                        </div>
+                        <div class="tf-row">
+                            {{3}}
+                            <span class="tf-text text-gray-200">הטלה א"ג $P$ היא לכסינה אורתוגונלית.</span>
+                        </div>
+                    </div>
+                `,
+                answers: ["נכון", "לא נכון", "לא נכון", "נכון"],
+                distractors: [] 
+            },
+
+            {
+                id: 33,
+                title: "נכון או לא נכון? טענות נוספות",
+                template: `
+                    <div class="flex flex-col gap-4 text-right items-start w-full" style="direction: rtl;">
+                        <div class="tf-row">
+                            {{0}}
+                            <span class="tf-text text-gray-200">אופרטור לכסין אוניטרית $\\Leftarrow$ הוא אוניטרי.</span>
+                        </div>
+                        <div class="tf-row">
+                            {{1}}
+                            <span class="tf-text text-gray-200">אופרטור אוניטרי $\\Leftarrow$ הוא לכסין אוניטרית.</span>
+                        </div>
+                        <div class="tf-row">
+                            {{2}}
+                            <span class="tf-text text-gray-200">כל הע"ע חיוביים $\\Leftarrow$ המטריצה מוגדרת חיובית.</span>
+                        </div>
+                        <div class="tf-row">
+                            {{3}}
+                            <span class="tf-text text-gray-200">כל הע"ע ממשיים $\\Leftarrow$ המטריצה סימטרית.</span>
+                        </div>
+                    </div>
+                `,
+                answers: ["לא נכון", "נכון", "לא נכון", "לא נכון"],
+                distractors: []
+            }
+        ];
+
+        // --- State Management ---
+        let currentLevelIndex = 0;
+        let placedItems = {}; 
+        let selectedItem = null;
+        // Load completed levels from localStorage
+        let completedLevels = new Set();
+        try {
+            const saved = localStorage.getItem('algebra2m_completed_levels');
+            if (saved) {
+                completedLevels = new Set(JSON.parse(saved));
+            }
+        } catch(e) { console.log('Storage access failed'); }
+
+        // --- DOM Elements ---
+        const menuScreen = document.getElementById('menu-screen');
+        const gameBoard = document.getElementById('game-board');
+        const endScreen = document.getElementById('end-screen');
+        const levelsGrid = document.getElementById('levels-grid');
+        const sentenceContainer = document.getElementById('sentence-container');
+        const wordBank = document.getElementById('word-bank');
+        const feedbackEl = document.getElementById('feedback');
+        const levelIndicator = document.getElementById('level-indicator');
+        const nextBtn = document.getElementById('next-btn');
+        const gameStatus = document.getElementById('game-status');
+
+        // --- Initialization ---
+        function initGame() {
+            renderMenu();
+            showMenu();
+        }
+
+        function renderMenu() {
+            levelsGrid.innerHTML = levels.map((level, index) => {
+                const isCompleted = completedLevels.has(index);
+                const completedClass = isCompleted ? 'completed border-green-600' : 'border-gray-700 hover:border-blue-400';
+                const checkMark = isCompleted ? `
+                    <div class="absolute top-2 right-2 bg-green-800 rounded-full p-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3 h-3 text-green-200">
+                          <path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd" />
+                        </svg>
+                    </div>` : '';
+
+                return `
+                <div onclick="startLevel(${index})" class="level-card relative p-4 rounded-xl shadow-lg cursor-pointer transition flex flex-col items-center text-center h-full ${completedClass}">
+                    ${checkMark}
+                    <div class="text-3xl font-bold text-blue-400 mb-2">${index + 1}</div>
+                    <div class="text-lg font-semibold text-gray-200">${level.title}</div>
+                </div>
+                `;
+            }).join('');
+            
+            // Render Math in titles if any
+            if (window.MathJax) {
+                MathJax.typesetPromise([levelsGrid]);
+            }
+        }
+
+        function showMenu() {
+            menuScreen.classList.remove('hidden');
+            gameBoard.classList.add('hidden');
+            endScreen.classList.add('hidden');
+            gameStatus.classList.add('hidden');
+            // Reset game state to be safe
+            selectedItem = null;
+            placedItems = {};
+            // Re-render to show updates if returning from game
+            renderMenu();
+        }
+
+        function startLevel(index) {
+            currentLevelIndex = index;
+            menuScreen.classList.add('hidden');
+            gameBoard.classList.remove('hidden');
+            endScreen.classList.add('hidden');
+            gameStatus.classList.remove('hidden');
+            loadLevel(currentLevelIndex);
+        }
+
+        // --- Level Loading ---
+        function loadLevel(index) {
+            const level = levels[index];
+            levelIndicator.innerText = index + 1;
+            placedItems = {};
+            selectedItem = null;
+            feedbackEl.innerText = "";
+            feedbackEl.className = "h-8 text-center font-bold text-lg mb-2";
+            nextBtn.classList.add('hidden');
+
+            let htmlContent = level.template;
+            level.answers.forEach((ans, i) => {
+                const slotHtml = `<div class="drop-zone" data-index="${i}" ondragover="allowDrop(event)" ondrop="drop(event)" onclick="handleSlotClick(${i})"></div>`;
+                htmlContent = htmlContent.replace(`{{${i}}}`, slotHtml);
+            });
+            
+            // For levels 31 & 33 (True/False), we don't add the border bottom to title to keep it cleaner
+            const borderClass = (level.id === 31 || level.id === 33) ? '' : 'border-b border-gray-700 pb-2';
+            
+            htmlContent = `<div class="w-full text-blue-400 font-bold text-lg mb-4 text-center ${borderClass}">${level.title}</div>` + htmlContent;
+            sentenceContainer.innerHTML = htmlContent;
+
+            // Prepare words
+            const bankItems = [];
+            level.answers.forEach(a => bankItems.push({text: a, type: 'correct'}));
+            level.distractors.forEach(d => bankItems.push({text: d, type: 'distractor'}));
+            
+            // Shuffle
+            shuffleArray(bankItems);
+
+            wordBank.innerHTML = "";
+            bankItems.forEach((item, idx) => {
+                const div = document.createElement('div');
+                div.className = "draggable-item rounded px-3 py-2 font-medium text-sm md:text-base select-none";
+                div.draggable = true;
+                div.innerHTML = item.text;
+                div.setAttribute('data-value', item.text); 
+                
+                div.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData("text", item.text); 
+                    if(selectedItem) { selectedItem.classList.remove('selected'); selectedItem = null; }
+                });
+                
+                div.addEventListener('click', (e) => {
+                    if (elementIsSlot(div)) return; 
+                    document.querySelectorAll('.draggable-item').forEach(el => el.classList.remove('selected'));
+                    div.classList.add('selected');
+                    selectedItem = div;
+                });
+                
+                wordBank.appendChild(div);
+            });
+
+            if (window.MathJax) {
+                MathJax.typesetPromise([sentenceContainer, wordBank]);
+            }
+        }
+
+        function elementIsSlot(el) {
+            return el.closest('.drop-zone') !== null;
+        }
+
+        // --- Interactions (Drag & Drop + Click) ---
+
+        let draggedContent = null;
+        let draggedElement = null;
+
+        function drag(ev) {
+            const rawValue = ev.target.getAttribute('data-value');
+            ev.dataTransfer.setData("text/plain", rawValue);
+            if(selectedItem) { selectedItem.classList.remove('selected'); selectedItem = null; }
+        }
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+            ev.target.classList.add('hovered');
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const slot = ev.target.closest('.drop-zone');
+            slot.classList.remove('hovered');
+            if (!slot) return;
+            const rawValue = ev.dataTransfer.getData("text/plain");
+            placeWordInSlot(slot, rawValue);
+        }
+
+        function handleSlotClick(slotIndex) {
+            const slot = document.querySelector(`.drop-zone[data-index="${slotIndex}"]`);
+            if (selectedItem) {
+                const rawValue = selectedItem.getAttribute('data-value');
+                placeWordInSlot(slot, rawValue);
+                selectedItem.classList.remove('selected');
+                selectedItem = null;
+            } else if (placedItems[slotIndex]) {
+                clearSlot(slot, slotIndex);
+            }
+        }
+
+        function placeWordInSlot(slot, rawContent) {
+            const index = slot.getAttribute('data-index');
+            slot.innerText = rawContent; 
+            slot.setAttribute('data-value', rawContent);
+            slot.style.borderStyle = "solid";
+            slot.style.backgroundColor = "#374151"; /* Gray-700 */
+            placedItems[index] = rawContent;
+            if (window.MathJax) {
+                slot.innerHTML = rawContent;
+                MathJax.typesetPromise([slot]);
+            }
+        }
+
+        function clearSlot(slot, index) {
+            slot.innerHTML = "";
+            slot.removeAttribute('data-value');
+            slot.style.borderStyle = "dashed";
+            slot.style.backgroundColor = "#374151"; /* Gray-700 */
+            delete placedItems[index];
+            slot.classList.remove('correct', 'wrong');
+        }
+
+        // --- Game Logic ---
+
+        function checkAnswer() {
+            const level = levels[currentLevelIndex];
+            let allCorrect = true;
+            let filledCount = 0;
+
+            level.answers.forEach((ans, i) => {
+                const slot = document.querySelector(`.drop-zone[data-index="${i}"]`);
+                const userValue = placedItems[i]; 
+
+                if (!userValue) {
+                    allCorrect = false;
+                    slot.classList.add('wrong');
+                    return;
+                }
+                filledCount++;
+                const isMatch = checkMatch(userValue, ans);
+
+                if (isMatch) {
+                    slot.classList.add('correct');
+                    slot.classList.remove('wrong');
+                } else {
+                    slot.classList.add('wrong');
+                    slot.classList.remove('correct');
+                    allCorrect = false;
+                }
+            });
+
+            if (filledCount < level.answers.length) {
+                feedbackEl.innerText = "נא למלא את כל החסר";
+                feedbackEl.className = "text-yellow-500 font-bold mb-4";
+                return;
+            }
+
+            if (allCorrect) {
+                feedbackEl.innerText = "כל הכבוד! תשובה נכונה.";
+                feedbackEl.className = "text-green-400 font-bold mb-4 text-xl";
+                nextBtn.classList.remove('hidden');
+                triggerConfetti();
+                
+                // Mark as completed
+                markLevelComplete(currentLevelIndex);
+            } else {
+                feedbackEl.innerText = "יש טעות, נסו שוב.";
+                feedbackEl.className = "text-red-400 font-bold mb-4";
+                setTimeout(() => {
+                    document.querySelectorAll('.wrong').forEach(el => el.classList.remove('wrong')); 
+                }, 1000);
+            }
+        }
+
+        function markLevelComplete(index) {
+            completedLevels.add(index);
+            try {
+                localStorage.setItem('algebra2m_completed_levels', JSON.stringify([...completedLevels]));
+            } catch(e) {}
+        }
+
+        function clearProgress() {
+            if(confirm('האם אתם בטוחים שברצונכם לאפס את ההתקדמות?')) {
+                completedLevels.clear();
+                try {
+                    localStorage.removeItem('algebra2m_completed_levels');
+                } catch(e) {}
+                renderMenu();
+            }
+        }
+
+        function checkMatch(userValue, correctValue) {
+            // Simple string comparison (trimming whitespace)
+            return userValue.trim() === correctValue.trim();
+        }
+        
+        // --- Navigation ---
+
+        function nextLevel() {
+            if (currentLevelIndex < levels.length - 1) {
+                startLevel(currentLevelIndex + 1);
+            } else {
+                showEndScreen();
+            }
+        }
+
+        function resetLevel() {
+            loadLevel(currentLevelIndex);
+        }
+
+        function showEndScreen() {
+            gameBoard.classList.add('hidden');
+            endScreen.classList.remove('hidden');
+            endScreen.classList.add('fade-in');
+            triggerConfetti();
+        }
+
+        function restartGame() {
+            initGame();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function triggerConfetti() {
+            var duration = 2 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+            var interval = setInterval(function() {
+                var timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+                var particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+
+        // Start
+        window.onload = initGame;
+
+    </script>
+</body>
+</html>
