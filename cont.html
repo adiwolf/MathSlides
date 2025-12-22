@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>MathMaster - הגדרות רציפות ויזואליות</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- JSZip -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&amp;family=STIX+Two+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #1e1e1e;
+            --accent-cyan: #58C4DD;
+            --accent-yellow: #FFFF00;
+            --accent-green: #83C167;
+            --accent-red: #FC6255;
+            --accent-purple: #9A72AC;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            font-family: 'Rubik', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Math Typography */
+        .math-font { font-family: 'STIX Two Text', serif; font-style: italic; }
+        .math-text { font-family: 'STIX Two Text', serif; font-style: normal; }
+        
+        /* Math Layout Components */
+        .math-inline {
+            direction: ltr;
+            display: inline-block;
+            unicode-bidi: embed;
+            font-size: 1.1em;
+            white-space: nowrap;
+        }
+
+        /* Limit Notation Stack */
+        .lim-stack {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+        .lim-stack .top { font-family: 'STIX Two Text', serif; font-size: 1em; line-height: 1; font-style: normal; }
+        .lim-stack .bottom { font-family: 'STIX Two Text', serif; font-size: 0.7em; line-height: 1; margin-top: 4px; }
+
+        /* Fraction */
+        .frac {
+            display: inline-flex;
+            flex-direction: column;
+            text-align: center;
+            vertical-align: middle;
+            margin: 0 4px;
+        }
+        .frac .num { border-bottom: 1px solid currentColor; padding-bottom: 2px; display: block; font-size: 0.9em; }
+        .frac .den { padding-top: 2px; display: block; font-size: 0.9em; }
+
+        /* Background */
+        .bg-grid {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        /* Drag & Drop */
+        .draggable-item {
+            cursor: grab;
+            user-select: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .draggable-item:active { cursor: grabbing; transform: scale(1.05); z-index: 50; }
+        .draggable-item.dragging { opacity: 0.5; border: 2px dashed var(--accent-cyan); }
+
+        .drop-zone { transition: all 0.3s ease; }
+        .drop-zone.drag-over { background-color: rgba(88, 196, 221, 0.1); border-color: var(--accent-cyan); }
+
+        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px var(--accent-yellow); } 50% { box-shadow: 0 0 20px var(--accent-yellow); } }
+        .correct-glow { animation: glow 1.5s infinite; border-color: var(--accent-green) !important; background-color: rgba(131, 193, 103, 0.1) !important; }
+        
+        @keyframes shake { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-4px); } 40%, 60% { transform: translateX(4px); } }
+        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; border-color: var(--accent-red) !important; }
+
+        .custom-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+        .custom-scroll::-webkit-scrollbar-track { background: #2d2d2d; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #555; border-radius: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
+        .math-expr { direction: ltr; display: inline-block; unicode-bidi: embed; font-family: 'STIX Two Text', serif; }
+    </style>
+    <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.top-0{top:0px}.-top-3{top:-0.75rem}.right-4{right:1rem}.z-20{z-index:20}.z-10{z-index:10}.mx-auto{margin-left:auto;margin-right:auto}.mt-1{margin-top:0.25rem}.mt-8{margin-top:2rem}.mb-2{margin-bottom:0.5rem}.mb-4{margin-bottom:1rem}.mt-2{margin-top:0.5rem}.mt-6{margin-top:1.5rem}.flex{display:flex}.h-6{height:1.5rem}.h-8{height:2rem}.max-h-\[220px\]{max-height:220px}.min-h-screen{min-height:100vh}.min-h-\[120px\]{min-height:120px}.min-h-\[40px\]{min-height:40px}.w-full{width:100%}.max-w-5xl{max-width:64rem}.flex-grow{flex-grow:1}.translate-y-2{--tw-translate-y:0.5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.cursor-grab{cursor:grab}.select-none{-webkit-user-select:none;user-select:none}.flex-row{flex-direction:row}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.content-center{align-content:center}.items-center{align-items:center}.justify-start{justify-content:flex-start}.justify-center{justify-content:center}.gap-12{gap:3rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.overflow-y-auto{overflow-y:auto}.rounded-lg{border-radius:0.5rem}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-gray-700{--tw-border-opacity:1;border-color:rgb(55 65 81 / var(--tw-border-opacity, 1))}.border-gray-500{--tw-border-opacity:1;border-color:rgb(107 114 128 / var(--tw-border-opacity, 1))}.border-gray-600{--tw-border-opacity:1;border-color:rgb(75 85 99 / var(--tw-border-opacity, 1))}.border-green-500{--tw-border-opacity:1;border-color:rgb(34 197 94 / var(--tw-border-opacity, 1))}.border-red-500{--tw-border-opacity:1;border-color:rgb(239 68 68 / var(--tw-border-opacity, 1))}.bg-gray-800{--tw-bg-opacity:1;background-color:rgb(31 41 55 / var(--tw-bg-opacity, 1))}.bg-gray-900\/80{background-color:rgb(17 24 39 / 0.8)}.bg-gray-700{--tw-bg-opacity:1;background-color:rgb(55 65 81 / var(--tw-bg-opacity, 1))}.bg-gray-800\/80{background-color:rgb(31 41 55 / 0.8)}.bg-gray-900{--tw-bg-opacity:1;background-color:rgb(17 24 39 / var(--tw-bg-opacity, 1))}.bg-gray-900\/60{background-color:rgb(17 24 39 / 0.6)}.bg-green-500\/20{background-color:rgb(34 197 94 / 0.2)}.bg-red-500\/20{background-color:rgb(239 68 68 / 0.2)}.bg-gradient-to-r{background-image:linear-gradient(to right, var(--tw-gradient-stops))}.from-cyan-400{--tw-gradient-from:#22d3ee var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 211 238 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-green-600{--tw-gradient-from:#16a34a var(--tw-gradient-from-position);--tw-gradient-to:rgb(22 163 74 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.to-purple-500{--tw-gradient-to:#a855f7 var(--tw-gradient-to-position)}.to-teal-600{--tw-gradient-to:#0d9488 var(--tw-gradient-to-position)}.bg-clip-text{-webkit-background-clip:text;background-clip:text}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.pb-2{padding-bottom:0.5rem}.pb-4{padding-bottom:1rem}.pt-4{padding-top:1rem}.text-center{text-align:center}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.uppercase{text-transform:uppercase}.italic{font-style:italic}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-transparent{color:transparent}.text-cyan-400{--tw-text-opacity:1;color:rgb(34 211 238 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-green-400{--tw-text-opacity:1;color:rgb(74 222 128 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-red-400{--tw-text-opacity:1;color:rgb(248 113 113 / var(--tw-text-opacity, 1))}.opacity-0{opacity:0}.opacity-50{opacity:0.5}.opacity-100{opacity:1}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.drop-shadow-lg{--tw-drop-shadow:drop-shadow(0 10px 8px rgb(0 0 0 / 0.04)) drop-shadow(0 4px 3px rgb(0 0 0 / 0.1));filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.hover\:-translate-y-1:hover{--tw-translate-y:-0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:border-gray-500:hover{--tw-border-opacity:1;border-color:rgb(107 114 128 / var(--tw-border-opacity, 1))}.hover\:bg-gray-700:hover{--tw-bg-opacity:1;background-color:rgb(55 65 81 / var(--tw-bg-opacity, 1))}.hover\:bg-gray-600:hover{--tw-bg-opacity:1;background-color:rgb(75 85 99 / var(--tw-bg-opacity, 1))}.hover\:from-green-500:hover{--tw-gradient-from:#22c55e var(--tw-gradient-from-position);--tw-gradient-to:rgb(34 197 94 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.hover\:to-teal-500:hover{--tw-gradient-to:#14b8a6 var(--tw-gradient-to-position)}@media (min-width: 768px){.md\:p-8{padding:2rem}.md\:text-5xl{font-size:3rem;line-height:1}}</style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <canvas id="confetti-canvas" width="1668" height="591"></canvas>
+    <div class="bg-grid"></div>
+    <!-- HEADER -->
+    <header class="w-full text-center py-8 bg-gray-900/80 backdrop-blur border-b border-gray-700 sticky top-0 z-20">
+        <h1 class="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-purple-500 pb-2">
+            הגדרות רציפות - MathMaster
+        </h1>
+        <p class="text-gray-400 text-sm mt-1">גררו את האריחים כדי להרכיב את ההגדרות המתמטיות המדויקות</p>
+    </header>
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow w-full max-w-5xl mx-auto p-4 md:p-8 flex flex-col gap-12" id="games-container">
+        <!-- Games will be injected here via JS -->
+    </main>
+    
+    <script>
+        // --- 1. Math HTML Generators ---
+        const m = (content) => `<span class="math-inline math-font">${content}</span>`;
+        const sub = (base, s) => `${base}<sub>${s}</sub>`;
+        
+        const limHtml = (x, a, val) => `
+            <div class="math-inline">
+                <div class="lim-stack">
+                    <span class="top">lim</span>
+                    <span class="bottom math-font">${x}&rarr;${a}</span>
+                </div>
+                <span class="math-font">${val}</span>
+            </div>`;
+        
+        const abs = (content) => `|${content}|`;
+
+        // --- 2. Games Data (Visual Math) ---
+        
+        const gamesData = [
+            {
+                id: 'limit-def',
+                title: "1. הגדרת רציפות באמצעות גבול",
+                parts: [
+                    { txt: `תהי&nbsp; ${m("f")}` }, 
+                    { txt: "מוגדרת" }, 
+                    { txt: `בסביבת&nbsp; ${m(sub("x","0"))}` },
+                    { txt: `נאמר כי` }, 
+                    { txt: `${m("f")}&nbsp; רציפה` }, 
+                    { txt: `ב-&nbsp; ${m(sub("x","0"))}` }, 
+                    { txt: "אם" },
+                    { txt: "הגבול" }, 
+                    { txt: limHtml("x", sub("x","0"), "f(x)") },
+                    { txt: "קיים" }, 
+                    { txt: "ושווה ל-" }, 
+                    { txt: m("f(" + sub("x","0") + ")") }
+                ],
+                valid: [['0','1','2','3','4','5','6','7','8','9','10','11']],
+                distractors: [
+                    m("L"), 
+                    m("0"), 
+                    m("&infin;"), 
+                    "שואף לאינסוף", 
+                    "מתבדרת", 
+                    m("f(x)"), 
+                    "לא קיים", 
+                    m(`f(${sub("x","n")})`),
+                    "לכל",
+                    "בסביבה מנוקבת",
+                    `של&nbsp; ${m(sub("x","0"))}`
+                ]
+            },
+            {
+                id: 'cauchy-def',
+                title: "2. הגדרה שקולה של רציפות לפי קושי (אפסילון-דלתא)",
+                parts: [
+                    { txt: `${m("f")}&nbsp; רציפה` }, 
+                    { txt: `ב-&nbsp; ${m(sub("x","0"))}` }, 
+                    { txt: "אם ורק אם" },
+                    { txt: "לכל" }, { txt: m("&epsilon; > 0") },
+                    { txt: "קיים" }, { txt: m("&delta; > 0") },
+                    { txt: "כך ש-" }, { txt: "לכל" }, { txt: m("x") },
+                    { txt: "אם" }, { txt: m(abs(`x - ${sub("x","0")}`) + " < &delta;") },
+                    { txt: "אז" }, { txt: m(abs(`f(x) - f(${sub("x","0")})`) + " < &epsilon;") }
+                ],
+                valid: [['0','1','2','3','4','5','6','7','8','9','10','11','12','13']],
+                distractors: [
+                    m(abs(`f(x) - L`) + " < &epsilon;"), // |f(x)-L|<epsilon
+                    m(`f(x) &rarr; f(${sub("x","0")})`), // f(x)->f(x0)
+                    m("0 <"), // 0<
+                    "לכל&nbsp; " + m("&delta;"), 
+                    "קיים&nbsp; " + m("&epsilon;"), 
+                    m("f(x) &rarr; L")
+                ]
+            },
+            {
+                id: 'heine-def',
+                title: "3. הגדרה שקולה של רציפות לפי היינה (סדרות)",
+                parts: [
+                    { txt: `${m("f")}&nbsp; רציפה` }, 
+                    { txt: `ב-&nbsp; ${m(sub("x","0"))}` },
+                    { txt: "אם ורק אם" },
+                    { txt: "לכל" }, { txt: "סדרה" }, { txt: m(sub("x","n")) },
+                    { txt: "המתכנסת" }, { txt: "ל-" }, { txt: m(sub("x","0")) },
+                    { txt: "מתקיים" }, { txt: "ש-" }, { txt: m("f(" + sub("x","n") + ")") },
+                    { txt: "מתכנסת" }, { txt: "ל-" }, { txt: m("f(" + sub("x","0") + ")") }
+                ],
+                valid: [['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14']],
+                distractors: [
+                    m(sub("x","n") + " &ne; " + sub("x","0")), 
+                    m(`f(${sub("x","n")}) &rarr; L`), 
+                    "לכל&nbsp; " + m("x"), 
+                    "מתבדרת",
+                    m(abs(`f(${sub("x","n")}) - f(${sub("x","0")})`) + " < &epsilon;")
+                ]
+            }
+        ];
+
+        // --- 3. Rendering ---
+
+        function init() {
+            const container = document.getElementById('games-container');
+            
+            gamesData.forEach(game => {
+                const section = document.createElement('section');
+                section.className = "bg-gray-800/80 backdrop-blur-md border border-gray-600 rounded-2xl p-6 shadow-2xl relative transition hover:border-gray-500";
+                section.id = `game-${game.id}`;
+                
+                const header = `
+                    <div class="text-center border-b border-gray-700 pb-4 mb-4">
+                        <h2 class="text-2xl font-bold text-white mb-2">${game.title}</h2>
+                    </div>
+                `;
+
+                const successMsg = `
+                    <div class="h-8 text-center transition-all duration-300 opacity-0 translate-y-2 mb-2" id="success-${game.id}">
+                        <span class="text-green-400 font-bold text-xl drop-shadow-lg flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">verified</span> ההגדרה הורכבה בהצלחה!
+                        </span>
+                    </div>
+                `;
+
+                const buildZone = `
+                    <div class="relative group">
+                        <div class="absolute -top-3 right-4 bg-gray-700 px-2 text-xs text-cyan-400 font-bold tracking-widest uppercase border border-gray-600 rounded z-10">
+                            איזור הבנייה
+                        </div>
+                        <div class="drop-zone min-h-[120px] bg-gray-900/60 border-2 border-dashed border-gray-500 rounded-xl p-4 flex flex-wrap gap-3 items-center justify-start content-center" 
+                             id="target-${game.id}" 
+                             data-game="${game.id}"
+                             ondragover="allowDrop(event)" 
+                             ondrop="drop(event)">
+                            <span class="text-gray-500 w-full text-center pointer-events-none select-none italic flex items-center justify-center gap-2" id="placeholder-${game.id}">
+                                <span class="material-symbols-outlined opacity-50">drag_pan</span> גררו את החלקים לכאן
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                const wordBank = `
+                    <div class="mt-6 space-y-2">
+                        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2 px-1">
+                            <span class="material-symbols-outlined text-sm">inventory_2</span> מחסן מילים
+                        </h3>
+                        <div class="drop-zone custom-scroll bg-gray-900 border border-gray-700 rounded-xl p-4 flex flex-wrap gap-2 items-center justify-center max-h-[220px] overflow-y-auto" 
+                             id="source-${game.id}" 
+                             data-game="${game.id}"
+                             ondragover="allowDrop(event)" 
+                             ondrop="drop(event)">
+                        </div>
+                    </div>
+                `;
+
+                const controls = `
+                    <div class="flex flex-row gap-3 justify-center items-center mt-6 pt-4 border-t border-gray-700">
+                        <button class="px-6 py-2 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-500 hover:to-teal-500 text-white rounded-lg font-bold shadow-lg transform hover:-translate-y-1 transition flex items-center gap-2" 
+                                onclick="checkAnswer('${game.id}')">
+                            <span class="material-symbols-outlined">check_circle</span> בדיקה
+                        </button>
+                        <button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg font-medium transition flex items-center gap-2" 
+                                onclick="resetGame('${game.id}')">
+                            <span class="material-symbols-outlined">restart_alt</span> נקה
+                        </button>
+                    </div>
+                    <div class="h-6 mt-2 flex items-center justify-center text-lg font-bold transition-opacity duration-300 opacity-0" id="feedback-${game.id}"></div>
+                `;
+
+                section.innerHTML = header + successMsg + buildZone + wordBank + controls;
+                container.appendChild(section);
+
+                // Populate Items
+                const sourceZone = document.getElementById(`source-${game.id}`);
+                let items = [];
+                game.parts.forEach((p, i) => items.push({ ...p, type: 'correct', originalIdx: i }));
+                game.distractors.forEach((txt, i) => items.push({ txt, type: 'distractor' }));
+                
+                // Shuffle
+                for (let i = items.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [items[i], items[j]] = [items[j], items[i]];
+                }
+
+                items.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'draggable-item bg-gray-700 hover:bg-gray-600 text-white border border-gray-600 px-3 py-2 rounded-md shadow-md text-lg cursor-grab flex items-center justify-center min-h-[40px]';
+                    div.innerHTML = item.txt;
+                    div.draggable = true;
+                    div.dataset.game = game.id;
+                    div.dataset.type = item.type;
+                    if (item.type === 'correct') div.dataset.originalIdx = item.originalIdx;
+
+                    div.addEventListener('dragstart', dragStart);
+                    div.addEventListener('dragend', dragEnd);
+                    div.addEventListener('click', (e) => clickMove(e, game.id));
+
+                    sourceZone.appendChild(div);
+                });
+            });
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        // --- 4. Logic ---
+
+        function checkAnswer(gameId) {
+            const game = gamesData.find(g => g.id === gameId);
+            const tgt = document.getElementById(`target-${gameId}`);
+            const feedbackEl = document.getElementById(`feedback-${gameId}`);
+            const successEl = document.getElementById(`success-${gameId}`);
+            
+            const items = Array.from(tgt.children).filter(el => el.id !== `placeholder-${gameId}`);
+
+            if (items.length === 0) {
+                showFeedback(feedbackEl, 'המשפט ריק', 'text-gray-400');
+                return;
+            }
+
+            let isCorrect = true;
+            if (items.length !== game.parts.length) {
+                isCorrect = false;
+            } else {
+                for (let i = 0; i < items.length; i++) {
+                    const el = items[i];
+                    
+                    if (el.dataset.type === 'distractor') {
+                        isCorrect = false;
+                        break;
+                    }
+                    
+                    // Check text content match instead of original index to allow swapping identical tiles
+                    const originalIdx = parseInt(el.dataset.originalIdx);
+                    if (game.parts[originalIdx].txt !== game.parts[i].txt) {
+                        isCorrect = false;
+                        break;
+                    }
+                }
+            }
+
+            if (isCorrect) {
+                tgt.classList.add('correct-glow');
+                successEl.classList.remove('opacity-0', 'translate-y-2');
+                successEl.classList.add('opacity-100', 'translate-y-0');
+                startConfetti();
+            } else {
+                tgt.classList.remove('shake');
+                void tgt.offsetWidth;
+                tgt.classList.add('shake');
+                
+                items.forEach((el, idx) => {
+                    let isItemCorrect = false;
+                    
+                    if (el.dataset.type !== 'distractor') {
+                        const originalIdx = parseInt(el.dataset.originalIdx);
+                        // Check if item text matches the expected text at this specific index
+                        if (idx < game.parts.length && game.parts[originalIdx].txt === game.parts[idx].txt) {
+                            isItemCorrect = true;
+                        }
+                    }
+
+                    if (!isItemCorrect) {
+                        el.classList.add('border-red-500', 'bg-red-500/20');
+                        setTimeout(() => el.classList.remove('border-red-500', 'bg-red-500/20'), 1500);
+                    } else {
+                        el.classList.add('border-green-500', 'bg-green-500/20');
+                        setTimeout(() => el.classList.remove('border-green-500', 'bg-green-500/20'), 1500);
+                    }
+                });
+                
+                if (items.some(x => x.dataset.type === 'distractor')) 
+                    showFeedback(feedbackEl, 'שימו לב: ישנם מסיחים', 'text-red-400');
+                else if (items.length !== game.parts.length)
+                     showFeedback(feedbackEl, 'חסרים חלקים', 'text-red-400');
+                else 
+                    showFeedback(feedbackEl, 'הסדר אינו נכון', 'text-red-400');
+            }
+        }
+
+        function showFeedback(el, msg, color) {
+            el.innerHTML = `<span class="${color} flex items-center gap-2"><span class="material-symbols-outlined text-lg">info</span>${msg}</span>`;
+            el.classList.remove('opacity-0');
+            setTimeout(() => el.classList.add('opacity-0'), 3000);
+        }
+
+        function resetGame(gameId) {
+            const tgt = document.getElementById(`target-${gameId}`);
+            const src = document.getElementById(`source-${gameId}`);
+            const ph = document.getElementById(`placeholder-${gameId}`);
+            const successEl = document.getElementById(`success-${gameId}`);
+
+            Array.from(tgt.children).forEach(el => {
+                if (el !== ph) src.appendChild(el);
+            });
+
+            ph.style.display = 'flex';
+            tgt.classList.remove('correct-glow', 'shake');
+            successEl.classList.remove('opacity-100', 'translate-y-0');
+            successEl.classList.add('opacity-0', 'translate-y-2');
+        }
+
+        // --- 5. Drag & Drop ---
+        let dragged = null;
+
+        function dragStart(e) {
+            dragged = e.target;
+            setTimeout(() => e.target.classList.add('dragging'), 0);
+        }
+
+        function dragEnd(e) {
+            e.target.classList.remove('dragging');
+            dragged = null;
+            gamesData.forEach(g => checkPlaceholder(g.id));
+        }
+
+        function allowDrop(e) { e.preventDefault(); }
+
+        function drop(e) {
+            e.preventDefault();
+            const dropTarget = e.currentTarget;
+            const gameId = dropTarget.dataset.game;
+            
+            if (dragged && dragged.dataset.game === gameId) {
+                dropTarget.appendChild(dragged);
+                checkPlaceholder(gameId);
+            }
+        }
+
+        function clickMove(e, gameId) {
+            const item = e.currentTarget;
+            const src = document.getElementById(`source-${gameId}`);
+            const tgt = document.getElementById(`target-${gameId}`);
+            
+            if (src.contains(item)) tgt.appendChild(item);
+            else src.appendChild(item);
+            checkPlaceholder(gameId);
+        }
+
+        function checkPlaceholder(gameId) {
+            const tgt = document.getElementById(`target-${gameId}`);
+            const ph = document.getElementById(`placeholder-${gameId}`);
+            const hasItems = Array.from(tgt.children).some(el => el !== ph);
+            ph.style.display = hasItems ? 'none' : 'flex';
+        }
+
+        // --- 6. Confetti ---
+        let confetti = false;
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let parts = [];
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        
+        class ConfettiParticle {
+            constructor() {
+                this.x = Math.random() * canvas.width; this.y = canvas.height + Math.random() * 100;
+                this.vx = (Math.random() - 0.5) * 4; this.vy = -(Math.random() * 10 + 10);
+                this.g = 0.3; this.c = `hsl(${Math.random()*360}, 70%, 50%)`;
+                this.s = Math.random() * 8 + 4; this.r = Math.random() * 360; this.rs = (Math.random() - 0.5) * 10;
+            }
+            update() { this.x += this.vx; this.y += this.vy; this.vy += this.g; this.r += this.rs; }
+            draw() { 
+                ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.r * Math.PI / 180); 
+                ctx.fillStyle = this.c; ctx.fillRect(-this.s/2, -this.s/2, this.s, this.s); ctx.restore(); 
+            }
+        }
+        function loop() {
+            if (!confetti && parts.length === 0) { ctx.clearRect(0,0,canvas.width,canvas.height); return; }
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            for (let i = parts.length-1; i>=0; i--) {
+                parts[i].update(); parts[i].draw();
+                if (parts[i].y > canvas.height + 20) parts.splice(i, 1);
+            }
+            if (confetti || parts.length > 0) requestAnimationFrame(loop);
+        }
+        function startConfetti() {
+            confetti = true; for (let i=0; i<100; i++) parts.push(new ConfettiParticle()); loop(); setTimeout(() => confetti = false, 2000);
+        }
+
+        init();
+    </script>
+</body>
+</html>
