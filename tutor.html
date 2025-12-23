@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Tutor PoC - Final Fix</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: system-ui, -apple-system, sans-serif; background-color: #f8fafc; }
+        .math-block { direction: ltr; display: block; margin: 15px 0; text-align: center; font-size: 1.4em; background: #ffffff; border-radius: 1rem; padding: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
+        .katex { direction: ltr !important; display: inline-block; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden border border-slate-200">
+        <div class="bg-indigo-700 p-8 text-white text-center shadow-lg">
+            <h1 class="text-3xl font-black tracking-tight">🎓 מורה פרטי לאלגברה לינארית 2</h1>
+            <p class="text-indigo-100 mt-2 font-medium">גרסה יציבה עם תיקון ניתוב אוטומטי</p>
+        </div>
+
+        <div class="p-8 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="space-y-8">
+                <div class="bg-indigo-50 p-6 rounded-2xl border-r-8 border-indigo-600 shadow-sm">
+                    <span id="q-step" class="text-xs font-bold text-indigo-600 uppercase tracking-widest"></span>
+                    <h2 id="q-topic" class="text-2xl font-black text-slate-800 mt-1 mb-3"></h2>
+                    <p id="q-instruction" class="text-lg text-slate-700 leading-relaxed"></p>
+                    <div id="q-content" class="math-block"></div>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="block font-bold text-slate-700 mr-1 text-sm uppercase tracking-wide">הפתרון שלך (טקסט):</label>
+                    <textarea id="user-text" class="w-full p-4 border-2 border-slate-200 rounded-2xl h-40 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all resize-none shadow-sm" placeholder="פרטי כאן את שלבי הפתרון שלך..."></textarea>
+                    
+                    <div class="bg-slate-50 p-4 rounded-2xl border-2 border-dashed border-slate-300">
+                        <label class="block font-bold text-slate-700 mb-2 text-sm uppercase tracking-wide">📸 צילום מהמחברת (Multimodal):</label>
+                        <input type="file" id="user-image" accept="image/*" class="block w-full text-sm text-slate-500 file:ml-4 file:py-2 file:px-6 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-100">
+                    <input type="password" id="api-key" class="w-full p-3 text-sm border-2 rounded-xl bg-slate-50 mb-4 focus:bg-white focus:border-indigo-500 outline-none transition-all" placeholder="הדביקי כאן את ה-API Key שלך">
+                    <button onclick="checkAnswer()" id="send-btn" class="w-full bg-indigo-600 text-white py-4 rounded-2xl font-black text-xl shadow-lg hover:bg-indigo-700 transform hover:-translate-y-1 transition-all active:scale-95">שלח לבדיקה 🚀</button>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <div class="bg-slate-900 rounded-3xl p-6 flex-grow shadow-inner relative min-h-[450px]">
+                    <h3 class="text-indigo-400 font-bold mb-4 flex items-center gap-2 tracking-widest uppercase text-xs">
+                        <span class="w-2 h-2 bg-indigo-400 rounded-full animate-pulse"></span>
+                        משוב המורה (AI Feedback):
+                    </h3>
+                    <div id="feedback" class="text-slate-100 text-lg leading-relaxed whitespace-pre-wrap font-medium h-[450px] overflow-y-auto pr-2 custom-scrollbar italic tracking-tight">המורה ממתין לפתרון הראשון שלך...</div>
+                    
+                    <button id="next-btn" onclick="nextQuestion()" class="hidden mt-6 w-full bg-emerald-500 text-white py-4 rounded-2xl font-black text-xl shadow-xl hover:bg-emerald-600 transition-all transform hover:scale-105">עברת בהצלחה! לשאלה הבאה ➡️</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+        const questions = [
+            {
+                topic: "מכפלה פנימית ופרמטרים",
+                instruction: "עבור אילו ערכי $a \\in \\mathbb{R}$ התבנית הבאה היא מכפלה פנימית?",
+                content: "f(x,y) = x_1y_1 + x_2y_2 + x_3y_3 + ax_2y_3 + ax_3y_2",
+                context: "התנאי הסופי: -1 < a < 1. אל תאשר פתרונות חלקיים כמו a=0. כוון לע''ע {1, 1+a, 1-a}."
+            },
+            {
+                topic: "הטלות ומרחקים",
+                instruction: "מצא את המרחק של $p(x) = x^2-3x+7$ מהמרחב $W^\\perp$ כאשר $W=\\{p(x)\\in V|p(1)=p(2)=0\\}$.",
+                content: "\\langle p,q \\rangle = p(0)q(0) + p(1)q(1) + p(2)q(2)",
+                context: "המרחק הוא נורמת ההיטל על W. על הסטודנט למצוא בסיס ל-W ולהטיל."
+            },
+            {
+                topic: "אתגר: משפט ריס",
+                instruction: "מצא דוגמת נגד למשפט ריס עבור המקרה בו המימד אינסופי.",
+                content: "f(v) = \\langle v, v_0 \\rangle",
+                context: "המטרה: להראות ש-v0 המבוקש לא קיים בתוך V. כוון למרחב הפולינומים."
+            }
+        ];
+
+        let currentIdx = 0;
+
+        window.loadQuestion = function() {
+            const q = questions[currentIdx];
+            document.getElementById('q-topic').innerText = q.topic;
+            document.getElementById('q-instruction').innerText = q.instruction;
+            document.getElementById('q-content').innerHTML = `$$${q.content}$$`;
+            document.getElementById('q-step').innerText = `שאלה ${currentIdx + 1} מתוך ${questions.length}`;
+            
+            renderMathInElement(document.body, {
+                delimiters: [{left: "$$", right: "$$", display: true}]
+            });
+            
+            document.getElementById('feedback').innerText = "💡 המורה ממתין לפתרון שלך...";
+            document.getElementById('next-btn').classList.add('hidden');
+        };
+
+        async function fileToGenerativePart(file) {
+            const base64EncodedDataPromise = new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                reader.readAsDataURL(file);
+            });
+            return { inlineData: { data: await base64EncodedDataPromise, mimeType: file.type } };
+        }
+
+        window.checkAnswer = async function() {
+            const apiKey = document.getElementById('api-key').value.trim();
+            if (!apiKey) { alert("אנא הכניסי API Key"); return; }
+
+            const feedbackEl = document.getElementById('feedback');
+            const sendBtn = document.getElementById('send-btn');
+            feedbackEl.innerText = "⏳ המורה בודק את הפתרון שלך (מנסה כמה נתיבי חיבור)...";
+            sendBtn.disabled = true;
+
+            // רשימת שמות מודלים לניסיונות חוזרים במידה ויש 404
+            const modelNames = ["gemini-1.5-flash", "gemini-pro", "gemini-1.5-pro"];
+            let success = false;
+
+            for (let name of modelNames) {
+                if (success) break;
+                try {
+                    const genAI = new GoogleGenerativeAI(apiKey);
+                    const model = genAI.getGenerativeModel({ model: name });
+
+                    const q = questions[currentIdx];
+                    const userText = document.getElementById('user-text').value;
+                    const fileInput = document.getElementById('user-image');
+                    
+                    const prompt = `אתה מורה לאלגברה לינארית. 
+                    השאלה: ${q.instruction}. 
+                    הנוסחה: ${q.content}. 
+                    הנחיה פדגוגית: ${q.context}. 
+                    ענה בעברית. אם הסטודנט צדק לגמרי, כתוב 'CORRECT'. אחרת, תן רמז בלי לגלות את הפתרון.`;
+
+                    const parts = [prompt, `תשובת הסטודנט: ${userText}`];
+                    if (fileInput.files.length > 0) {
+                        parts.push(await fileToGenerativePart(fileInput.files[0]));
+                    }
+
+                    const result = await model.generateContent(parts);
+                    const text = result.response.text();
+                    
+                    feedbackEl.innerText = text;
+                    if (text.toUpperCase().includes("CORRECT")) {
+                        document.getElementById('next-btn').classList.remove('hidden');
+                    }
+                    success = true;
+                    console.log("Connected using model: " + name);
+                } catch (error) {
+                    console.error("Failed with model " + name + ": ", error);
+                    feedbackEl.innerText = "🔄 מנסה נתיב חלופי...";
+                }
+            }
+
+            if (!success) {
+                feedbackEl.innerHTML = `<span class="text-red-400 font-bold">❌ כל ניסיונות החיבור נכשלו.</span>\n\n<p class="text-sm text-slate-400 mt-4">זה קורה בדרך כלל אם המפתח לא הועתק נכון או אם המכסה החינמית של גוגל הסתיימה להיום.</p>`;
+            }
+            sendBtn.disabled = false;
+        };
+
+        window.nextQuestion = function() {
+            currentIdx = (currentIdx + 1) % questions.length;
+            loadQuestion();
+        };
+
+        loadQuestion();
+    </script>
+</body>
+</html>
