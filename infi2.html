@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק ניסוחי הגדרות ומשפטים באינפי 2</title>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for in-browser JSX parsing -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX for Math Rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap');
+        
+        body {
+            font-family: 'Rubik', sans-serif;
+            background-color: #0f172a; /* slate-900 */
+            color: #f8fafc; /* slate-50 */
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .katex {
+            font-size: 1.15em;
+            direction: ltr; /* Ensure math is always LTR */
+        }
+        
+        .slot-enter {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Hide scrollbar for clean UI */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        const { useState, useEffect } = React;
+
+        // --- Data ---
+        const levelsData = [
+            {
+                title: "סביבה מעגלית",
+                tokens: ["יהי", "$\\varepsilon>0$", "ותהי", "$(a,b)$", "נקודה.", "אוסף", "כל", "הנקודות", "$(x,y)$", "המקיימות", "$\\sqrt{(x-a)^{2}+(y-b)^{2}}<\\varepsilon$", "נקרא", "$\\varepsilon$-סביבה", "מעגלית", "של", "$(a,b)$."]
+            },
+            {
+                title: "סביבה ריבועית",
+                tokens: ["יהי", "$\\varepsilon>0$", "ותהי", "$(a,b)$", "נקודה.", "אוסף", "כל", "הנקודות", "$(x,y)$", "המקיימות", "$|x-a|<\\varepsilon$", "וגם", "$|y-b|<\\varepsilon$", "נקרא", "$\\varepsilon$-סביבה", "ריבועית", "של", "$(a,b)$."]
+            },
+            {
+                title: "נקודה פנימית",
+                tokens: ["$x$", "נקראת", "נקודה", "פנימית", "של", "קבוצה", "$A$", "אם", "קיימת", "$\\varepsilon$-סביבה", "של", "$x$", "המוכלת", "ב-$A$."]
+            },
+            {
+                title: "נקודת שפה",
+                tokens: ["$x$", "נקראת", "נקודת", "שפה", "של", "קבוצה", "$A$", "אם", "בכל", "$\\varepsilon$-סביבה", "של", "$x$", "יש", "גם", "נקודה", "השייכת", "ל-$A$", "וגם", "נקודה", "שלא", "שייכת", "ל-$A$."]
+            },
+            {
+                title: "קבוצה פתוחה",
+                tokens: ["$A$", "נקראת", "קבוצה", "פתוחה", "אם", "כל", "נקודה", "השייכת", "ל-$A$", "היא", "נקודה", "פנימית."]
+            },
+            {
+                title: "קבוצה סגורה",
+                tokens: ["$A$", "נקראת", "קבוצה", "סגורה", "אם", "כל", "נקודות", "השפה", "של", "$A$", "שייכות", "ל-$A$."]
+            },
+            {
+                title: "פנים של קבוצה",
+                tokens: ["אוסף", "כל", "הנקודות", "הפנימיות", "של", "קבוצה", "$A$", "נקרא", "הפנים", "של", "$A$", "ומסומן", "$A^{\\circ}$."]
+            },
+            {
+                title: "שפה של קבוצה",
+                tokens: ["אוסף", "כל", "נקודות", "השפה", "של", "קבוצה", "$A$", "נקרא", "השפה", "של", "$A$", "ומסומן", "$\\partial A$."]
+            },
+            {
+                title: "סגור של קבוצה",
+                tokens: ["הקבוצה", "$A\\cup\\left(\\partial A\\right)$", "נקראת", "הסגור", "של", "קבוצה", "$A$", "ומסומנת", "$\\overline{A}$."]
+            },
+            {
+                title: "קבוצה חסומה",
+                tokens: ["$A$", "נקראת", "קבוצה", "חסומה", "אם", "קיימת", "סביבה", "שמכילה", "את", "$A$."]
+            },
+            {
+                title: "קבוצה קומפקטית",
+                tokens: ["$A$", "נקראת", "קבוצה", "קומפקטית", "אם", "היא", "סגורה", "וחסומה."]
+            },
+            {
+                title: "עקום רציף",
+                tokens: ["אוסף", "כל", "הנקודות", "$x=(x_{1},x_{2},\\dots,x_{n})$", "המקיימות", "$x_{i}=\\varphi_{i}(t)$", "כאשר", "$\\varphi_{i}(t)$", "פונקציות", "רציפות", "בקטע", "$[a,b]$", "נקרא", "עקום", "רציף", "ב-$\\mathbb{R}^{n}$", "ומסומן", "$\\gamma(t)$."]
+            },
+            {
+                title: "קבוצה קשירה",
+                tokens: ["קבוצה", "$A$", "נקראת", "קשירה", "אם", "לכל", "$x,y\\in A$", "קיים", "עקום", "רציף", "המחבר", "את", "$x$", "ל-$y$", "ומוכל", "כולו", "ב-$A$."]
+            },
+            {
+                title: "גבול של סדרה",
+                tokens: ["נאמר", "כי", "$\\underset{n\\to\\infty}{\\lim}(x_{n},y_{n})=(L_{1},L_{2})$", "אם", "לכל", "$\\varepsilon>0$", "קיים", "$N$", "כך", "שלכל", "$n>N$", "מתקיים", "$\\sqrt{(x_{n}-L_{1})^{2}+(y_{n}-L_{2})^{2}}<\\varepsilon$."]
+            },
+            {
+                title: "גבול של סדרה ברכיבים",
+                tokens: ["$\\underset{n\\to\\infty}{\\lim}(x_{n},y_{n})=(L_{1},L_{2})$", "אם", "ורק", "אם", "$\\underset{n\\to\\infty}{\\lim}x_{n}=L_{1}$", "וגם", "$\\underset{n\\to\\infty}{\\lim}y_{n}=L_{2}$."]
+            },
+            {
+                title: "אפיון קבוצה סגורה לפי סדרות",
+                tokens: ["קבוצה", "$A$", "היא", "סגורה", "אם", "ורק", "אם", "לכל", "סדרה", "מתכנסת", "של", "נקודות", "מ-$A$", "מתקיים", "שגם", "הגבול", "של", "הסדרה", "שייך", "ל-$A$."]
+            },
+            {
+                title: "אפיון קבוצה קומפקטית לפי סדרות",
+                tokens: ["קבוצה", "$A$", "היא", "קומפקטית", "אם", "ורק", "אם", "לכל", "סדרה", "של", "נקודות", "מ-$A$", "קיימת", "תת-סדרה", "שמתכנסת", "לגבול", "השייך", "ל-$A$."]
+            },
+            {
+                title: "גבול לפי סביבה מעגלית",
+                tokens: ["תהי", "$f(x,y)$", "מוגדרת", "בסביבה", "מנוקבת", "של", "הנקודה", "$(a,b)$.", "נאמר", "כי", "$\\underset{(x,y)\\to(a,b)}{\\lim}f(x,y)=L$", "אם", "לכל", "$\\varepsilon>0$", "קיים", "$\\delta>0$", "כך", "שלכל", "$(x,y)$", "המקיימת", "$0<\\sqrt{(x-a)^{2}+(y-b)^{2}}<\\delta$", "מתקיים", "$|f(x,y)-L|<\\varepsilon$."]
+            },
+            {
+                title: "גבול לפי סביבה ריבועית",
+                tokens: ["תהי", "$f(x,y)$", "מוגדרת", "בסביבה", "מנוקבת", "של", "$(a,b)$.", "נאמר", "כי", "$\\underset{(x,y)\\to(a,b)}{\\lim}f(x,y)=L$", "אם", "לכל", "$\\varepsilon>0$", "קיימת", "$\\delta>0$", "כך", "שלכל", "$(x,y)$", "המקיים", "$(x,y)\\neq(a,b)$", "וגם", "$|x-a|<\\delta$", "וגם", "$|y-b|<\\delta$", "מתקיים", "$|f(x,y)-L|<\\varepsilon$."]
+            },
+            {
+                title: "גבול לפי סדרות (היינה)",
+                tokens: ["$\\underset{(x,y)\\to(a,b)}{\\lim}f(x,y)=L$", "אם", "ורק", "אם", "לכל", "סדרה", "$(x_{n},y_{n})\\xrightarrow[n\\to\\infty]{}(a,b)$", "המקיימת", "$(x_{n},y_{n})\\neq(a,b)$", "לכל", "$n$,", "מתקיים", "$f(x_{n},y_{n})\\xrightarrow[n\\to\\infty]{}L$."]
+            }
+        ];
+
+        // --- Utils ---
+        const shuffleArray = (array) => {
+            const newArr = [...array];
+            for (let i = newArr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+            }
+            return newArr;
+        };
+
+        // --- Components ---
+        const MathTileText = ({ text }) => {
+            // Split by $...$ to isolate math expressions from hebrew text
+            const parts = text.split(/(\$[^$]+\$)/g);
+
+            return (
+                <span dir="rtl" className="inline-flex items-center justify-center flex-wrap" style={{ gap: '0.2rem' }}>
+                    {parts.map((part, index) => {
+                        if (part.startsWith('$') && part.endsWith('$')) {
+                            const mathStr = part.slice(1, -1);
+                            if (window.katex) {
+                                try {
+                                    const html = window.katex.renderToString(mathStr, { throwOnError: false, displayMode: false });
+                                    return <span key={index} dir="ltr" dangerouslySetInnerHTML={{ __html: html }} />;
+                                } catch (e) {
+                                    return <span key={index} dir="ltr">{mathStr}</span>;
+                                }
+                            }
+                            return <span key={index} dir="ltr">{mathStr}</span>;
+                        }
+                        // Render standard hebrew text parts
+                        return part.trim() ? <span key={index}>{part}</span> : null;
+                    })}
+                </span>
+            );
+        };
+
+        const Tile = ({ tile, isError, isCorrectHighlight, onClick, onDragStart }) => {
+            let colors = 'bg-slate-800 border-slate-600 text-slate-100 hover:border-indigo-400 hover:shadow-[0_0_15px_rgba(99,102,241,0.4)] shadow-md';
+            if (isError) colors = 'bg-red-900/40 border-red-500/50 text-red-200 shadow-md';
+            if (isCorrectHighlight) colors = 'bg-emerald-900/40 border-emerald-500/50 text-emerald-200 shadow-lg scale-105 shadow-[0_0_20px_rgba(16,185,129,0.3)]';
+
+            return (
+                <div
+                    draggable
+                    onDragStart={onDragStart}
+                    onClick={onClick}
+                    className={`
+                        cursor-pointer select-none
+                        px-3 py-2 md:px-4 md:py-2 rounded-xl font-medium text-base md:text-lg transition-all
+                        active:scale-95 border-b-4 
+                        flex items-center justify-center
+                        ${colors}
+                    `}
+                >
+                    <MathTileText text={tile.text} />
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [gameState, setGameState] = useState('home'); // home, playing
+            const [currentLevel, setCurrentLevel] = useState(null);
+            const [completedLevels, setCompletedLevels] = useState(new Set());
+            
+            const [bank, setBank] = useState([]);
+            const [slots, setSlots] = useState([]);
+            
+            const [isCorrect, setIsCorrect] = useState(null);
+            const [showErrors, setShowErrors] = useState(false);
+
+            const initializeLevel = (levelIndex) => {
+                const initialTokens = levelsData[levelIndex].tokens;
+                const tiles = initialTokens.map((text, i) => ({ id: `tile-${levelIndex}-${i}`, text }));
+                
+                // Ensure the initial state isn't coincidentally the perfect answer
+                let shuffled = shuffleArray(tiles);
+                while (shuffled.every((t, i) => t.id === tiles[i].id) && tiles.length > 1) {
+                    shuffled = shuffleArray(tiles);
+                }
+
+                setBank(shuffled);
+                setSlots(Array(initialTokens.length).fill(null));
+                setIsCorrect(null);
+                setShowErrors(false);
+            };
+
+            useEffect(() => {
+                if (gameState === 'playing' && currentLevel !== null) {
+                    initializeLevel(currentLevel);
+                }
+            }, [currentLevel, gameState]);
+
+            // --- Interactions ---
+            const moveTileToSlot = (tile) => {
+                if (isCorrect) return;
+                const firstEmptyIndex = slots.findIndex(s => s === null);
+                if (firstEmptyIndex !== -1) {
+                    const newSlots = [...slots];
+                    newSlots[firstEmptyIndex] = tile;
+                    setSlots(newSlots);
+                    setBank(bank.filter(t => t.id !== tile.id));
+                    setShowErrors(false);
+                    setIsCorrect(null);
+                }
+            };
+
+            const moveTileToBank = (slotIndex) => {
+                if (isCorrect) return;
+                const tile = slots[slotIndex];
+                if (tile) {
+                    const newSlots = [...slots];
+                    newSlots[slotIndex] = null;
+                    setSlots(newSlots);
+                    setBank([...bank, tile]);
+                    setShowErrors(false);
+                    setIsCorrect(null);
+                }
+            };
+
+            const resetLevel = () => {
+                if (isCorrect) return;
+                initializeLevel(currentLevel);
+            };
+
+            // --- Drag and Drop Logic ---
+            const handleDragStart = (e, source, index, tile) => {
+                if (isCorrect) {
+                    e.preventDefault();
+                    return;
+                }
+                e.dataTransfer.setData("application/json", JSON.stringify({ source, index, tile }));
+            };
+
+            const handleDropToSlot = (e, targetIndex) => {
+                e.preventDefault();
+                if (isCorrect) return;
+                
+                const dataStr = e.dataTransfer.getData("application/json");
+                if (!dataStr) return;
+                
+                try {
+                    const { source, index: sourceIndex, tile } = JSON.parse(dataStr);
+                    const newSlots = [...slots];
+                    const newBank = [...bank];
+                    const targetTile = newSlots[targetIndex];
+
+                    if (source === 'bank') {
+                        const tileIndexInBank = newBank.findIndex(t => t.id === tile.id);
+                        if (tileIndexInBank !== -1) newBank.splice(tileIndexInBank, 1);
+                        if (targetTile) newBank.push(targetTile);
+                        newSlots[targetIndex] = tile;
+                    } else if (source === 'slot') {
+                        if (sourceIndex === targetIndex) return;
+                        newSlots[sourceIndex] = targetTile;
+                        newSlots[targetIndex] = tile;
+                    }
+
+                    setSlots(newSlots);
+                    setBank(newBank);
+                    setShowErrors(false);
+                    setIsCorrect(null);
+                } catch(e) {}
+            };
+
+            const handleDropToBank = (e) => {
+                e.preventDefault();
+                if (isCorrect) return;
+
+                const dataStr = e.dataTransfer.getData("application/json");
+                if (!dataStr) return;
+
+                try {
+                    const { source, index: sourceIndex, tile } = JSON.parse(dataStr);
+                    if (source === 'slot') {
+                        const newSlots = [...slots];
+                        newSlots[sourceIndex] = null;
+                        setSlots(newSlots);
+                        setBank([...bank, tile]);
+                        setShowErrors(false);
+                        setIsCorrect(null);
+                    }
+                } catch(e) {}
+            };
+
+            // --- Game Logic ---
+            const checkAnswer = () => {
+                const currentLevelTokens = levelsData[currentLevel].tokens;
+                let correct = true;
+                slots.forEach((tile, index) => {
+                    // Check by TEXT to allow swapping identical tiles safely
+                    if (!tile || tile.text !== currentLevelTokens[index]) {
+                        correct = false;
+                    }
+                });
+                
+                setIsCorrect(correct);
+                setShowErrors(!correct);
+                
+                if (correct) {
+                    setCompletedLevels(prev => new Set(prev).add(currentLevel));
+                    // Fire Confetti!
+                    if (window.confetti) {
+                        const duration = 2000;
+                        const end = Date.now() + duration;
+
+                        (function frame() {
+                            confetti({
+                                particleCount: 5,
+                                angle: 60,
+                                spread: 55,
+                                origin: { x: 0 },
+                                colors: ['#6366f1', '#10b981', '#f59e0b']
+                            });
+                            confetti({
+                                particleCount: 5,
+                                angle: 120,
+                                spread: 55,
+                                origin: { x: 1 },
+                                colors: ['#6366f1', '#10b981', '#f59e0b']
+                            });
+
+                            if (Date.now() < end) {
+                                requestAnimationFrame(frame);
+                            }
+                        }());
+                    }
+                }
+            };
+
+            const returnToHome = () => {
+                setGameState('home');
+                setCurrentLevel(null);
+            };
+
+            // --- Render Screens ---
+            if (gameState === 'home') {
+                const totalLevels = levelsData.length;
+                const completedCount = completedLevels.size;
+
+                return (
+                    <div className="min-h-screen bg-slate-900 p-4 md:p-8">
+                        <div className="max-w-6xl mx-auto">
+                            <header className="text-center mb-10 mt-4">
+                                <h1 className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 mb-6 tracking-tight drop-shadow-sm">משחק ניסוחי הגדרות ומשפטים באינפי 2</h1>
+                                <div className="flex flex-col items-center gap-4">
+                                    <p className="text-lg text-slate-300 bg-slate-800/80 inline-block px-8 py-3 rounded-2xl font-medium shadow-sm border border-slate-700 backdrop-blur-sm">
+                                        בכל משחקון הרכיבו את הניסוח המדויק של ההגדרה או המשפט בעזרת המילים הנתונות
+                                    </p>
+                                    <div className="text-sm font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 px-5 py-2 rounded-full shadow-md flex items-center gap-2">
+                                        <span>הושלמו {completedCount} מתוך {totalLevels}</span>
+                                        {completedCount === totalLevels && <span className="text-yellow-400">🏆</span>}
+                                    </div>
+                                </div>
+                            </header>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 pb-10">
+                                {levelsData.map((level, index) => {
+                                    const isCompleted = completedLevels.has(index);
+                                    return (
+                                        <button
+                                            key={index}
+                                            onClick={() => { setCurrentLevel(index); setGameState('playing'); }}
+                                            className={`
+                                                relative p-6 rounded-2xl shadow-md hover:shadow-xl transition-all text-right
+                                                border-2 flex flex-col justify-between min-h-[140px] group
+                                                transform hover:-translate-y-1 active:translate-y-0
+                                                ${isCompleted
+                                                    ? 'bg-emerald-900/20 border-emerald-500/40 hover:border-emerald-400/80'
+                                                    : 'bg-slate-800 border-slate-700 hover:border-indigo-500/50'}
+                                            `}
+                                        >
+                                            <div className="font-bold text-lg text-slate-200 mb-4 group-hover:text-indigo-300 transition-colors line-clamp-3">
+                                                {level.title}
+                                            </div>
+                                            <div className="flex items-end justify-between mt-auto">
+                                                {isCompleted ? (
+                                                    <div className="text-emerald-400 flex items-center gap-1.5 font-bold text-sm bg-emerald-900/40 px-3 py-1.5 rounded-lg w-full justify-center border border-emerald-500/20">
+                                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                        נפתר בהצלחה
+                                                    </div>
+                                                ) : (
+                                                    <div className="text-slate-400 font-medium text-sm group-hover:text-indigo-300 transition-colors w-full text-center bg-slate-700/50 px-3 py-1.5 rounded-lg">
+                                                        לחצו לתרגול
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                );
+            }
+
+            // Playing Screen
+            const isBoardFull = !slots.includes(null);
+            const levelData = levelsData[currentLevel];
+
+            return (
+                <div className="min-h-screen flex flex-col bg-slate-900 overflow-hidden">
+                    {/* Header */}
+                    <div className="bg-slate-800/80 backdrop-blur-md shadow-md border-b border-slate-700 sticky top-0 z-10">
+                        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
+                            <div className="flex items-center gap-3 md:gap-4">
+                                <button 
+                                    onClick={returnToHome}
+                                    className="flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white px-3 md:px-4 py-2 rounded-xl font-medium transition-colors border border-slate-600 hover:border-slate-500"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"/></svg>
+                                    <span className="hidden sm:inline">חזרה לתפריט</span>
+                                </button>
+                                <h1 className="text-lg md:text-2xl font-black text-slate-100 tracking-tight hidden md:block">
+                                    אינפי 2 <span className="font-medium text-slate-500 mx-1">|</span> <span className="text-indigo-400">משחק ניסוחי הגדרות ומשפטים</span>
+                                </h1>
+                            </div>
+                            <div className="bg-indigo-500/20 text-indigo-300 px-4 py-1.5 rounded-full font-bold text-sm md:text-base border border-indigo-500/30 shadow-sm">
+                                {levelData.title}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main Board */}
+                    <div className="flex-1 overflow-y-auto p-4 md:p-8">
+                        <div className="max-w-5xl mx-auto bg-slate-800 rounded-[2rem] shadow-2xl p-6 md:p-10 border border-slate-700">
+                            
+                            <div className="flex justify-between items-start mb-8 border-b-2 border-slate-700 pb-4">
+                                <h2 className="text-2xl md:text-3xl font-bold text-slate-100 flex items-center">
+                                    <span className="bg-indigo-500 w-2.5 h-8 rounded-full ml-4 inline-block shadow-[0_0_10px_rgba(99,102,241,0.5)]"></span>
+                                    {levelData.title}
+                                </h2>
+                                <button onClick={resetLevel} title="אפס משימה" className="text-slate-400 hover:text-indigo-400 transition-colors p-2 bg-slate-900 hover:bg-slate-700 rounded-full border border-slate-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                                </button>
+                            </div>
+
+                            {/* Bank Area */}
+                            <div 
+                                onDragOver={(e) => e.preventDefault()}
+                                onDrop={handleDropToBank}
+                                className={`
+                                    flex flex-wrap gap-3 justify-center p-6 rounded-2xl min-h-[140px] transition-all border-2
+                                    ${bank.length === 0 ? 'bg-slate-900/50 border-dashed border-slate-700' : 'bg-slate-900/80 border-slate-700 shadow-inner'}
+                                `}
+                            >
+                                {bank.length === 0 && <span className="text-slate-500 select-none font-medium text-lg self-center">כל האריחים על הלוח, בידקו את התשובה! 👇</span>}
+                                {bank.map(tile => (
+                                    <Tile 
+                                        key={tile.id} 
+                                        tile={tile} 
+                                        onDragStart={(e) => handleDragStart(e, 'bank', null, tile)} 
+                                        onClick={() => moveTileToSlot(tile)} 
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Sentence Area (Slots) */}
+                            <div className="mt-12 flex flex-wrap justify-center items-center" style={{ gap: '0.4rem 0.6rem' }}>
+                                {slots.map((tile, index) => (
+                                    <div 
+                                        key={`slot-${index}`}
+                                        onDragOver={(e) => e.preventDefault()}
+                                        onDrop={(e) => handleDropToSlot(e, index)}
+                                        className={`
+                                            relative min-h-[3.5rem] flex items-center justify-center rounded-xl transition-all
+                                            ${!tile ? 'w-16 md:w-24 border-2 border-dashed border-slate-600 bg-slate-900/50' : 'min-w-[auto]'}
+                                        `}
+                                    >
+                                        {tile && (
+                                            <Tile 
+                                                tile={tile} 
+                                                isError={showErrors && tile.text !== levelData.tokens[index]}
+                                                isCorrectHighlight={isCorrect}
+                                                onClick={() => moveTileToBank(index)}
+                                                onDragStart={(e) => handleDragStart(e, 'slot', index, tile)}
+                                            />
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Status and Controls */}
+                            <div className="mt-12 text-center h-24 flex flex-col justify-center">
+                                {isCorrect === null && (
+                                    <button 
+                                        onClick={checkAnswer}
+                                        disabled={!isBoardFull}
+                                        className={`
+                                            mx-auto px-12 py-3.5 rounded-2xl font-bold text-xl transition-all shadow-md
+                                            ${isBoardFull 
+                                                ? 'bg-indigo-600 hover:bg-indigo-500 text-white hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transform hover:-translate-y-0.5 active:translate-y-0' 
+                                                : 'bg-slate-700 text-slate-500 cursor-not-allowed shadow-none'}
+                                        `}
+                                    >
+                                        בדיקה
+                                    </button>
+                                )}
+
+                                {isCorrect === true && (
+                                    <div className="slot-enter">
+                                        <div className="text-emerald-400 font-bold text-xl mb-4 flex justify-center items-center gap-2 drop-shadow-md">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            מצוין! תשובה נכונה
+                                        </div>
+                                        <button 
+                                            onClick={returnToHome}
+                                            className="mx-auto px-10 py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-bold text-lg shadow-lg hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition-all active:scale-95 flex items-center gap-2"
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                            חזרה לתפריט הראשי
+                                        </button>
+                                    </div>
+                                )}
+
+                                {isCorrect === false && (
+                                    <div className="slot-enter">
+                                        <div className="text-red-400 font-bold text-lg mb-4 flex justify-center items-center gap-2 bg-red-900/20 py-2 px-4 rounded-xl inline-flex border border-red-500/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                                            אופס, יש שגיאה בסידור. האריחים השגויים סומנו באדום.
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
